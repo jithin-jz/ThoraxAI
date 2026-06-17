@@ -1,0 +1,15 @@
+# Cache and build files
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+node_modules/
+dist/
+.env
+
+# IDEs
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

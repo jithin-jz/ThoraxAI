@@ -1,0 +1,26 @@
+# GCP Configuration
+project_id      = "your-gcp-project-id"
+region          = "us-central1"
+app_name        = "thoraxai-backend"
+
+# Database Configuration (MongoDB Atlas Connection URL)
+# Example: mongodb+srv://username:password@cluster.mongodb.net
+database_url    = "mongodb+srv://<user>:<password>@cluster.xxxx.mongodb.net"
+db_name         = "ai_xray_master"
+
+# Redis Cache Configuration (Upstash / RedisLabs Connection URL)
+# Example: rediss://default:password@name.upstash.io:6379
+redis_url       = "rediss://default:password@xxx.upstash.io:6379"
+
+# Auth and API Configurations
+jwt_secret_key  = "generate-a-secure-random-string-for-jwt"
+base_domain     = "yourdomain.com" # Or localhost if testing locally
+
+# Hugging Face Configuration (Model and Dataset Hub Access)
+hf_token        = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+hf_dataset_repo = "jithinjz/xray-chest-pneumonia"
+hf_model_repo   = "jithinjz/xray-models"
+
+# LLM Config (Groq)
+groq_api_key    = "gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+groq_model      = "llama-3.3-70b-versatile"

@@ -13,3 +13,14 @@ dist/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+terraform.tfvars
+.terraform.lock.hcl
+
+# Firebase
+**/.firebase/
+

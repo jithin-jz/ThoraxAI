@@ -28,9 +28,10 @@ def get_master_db() -> AsyncIOMotorDatabase:
 def get_tenant_database(hospital_id: str) -> AsyncIOMotorDatabase:
     """
     Returns the isolated database for a specific hospital.
-    Each hospital gets: tenant_<hospital_id>
+    Each hospital gets: t_<hospital_id_without_hyphens> to fit MongoDB's 38-char limit.
     """
-    return client[f"tenant_{hospital_id}"]
+    short_id = hospital_id.replace("-", "")
+    return client[f"t_{short_id}"]
 
 
 async def setup_tenant_database(hospital_id: str) -> AsyncIOMotorDatabase:

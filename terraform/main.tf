@@ -17,7 +17,6 @@ provider "google" {
 resource "google_project_service" "apis" {
   for_each = toset([
     "run.googleapis.com",              # Cloud Run
-    "artifactregistry.pkg.dev",        # Artifact Registry (deprecated but keep format)
     "artifactregistry.googleapis.com", # Artifact Registry
     "secretmanager.googleapis.com",     # Secret Manager
     "iam.googleapis.com",              # Identity & Access Management

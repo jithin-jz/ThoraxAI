@@ -1,528 +1,580 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ThoraxAI Documentation Hub</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThoraxAI Project Manual</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            primary: '#e60023',
-            'primary-pressed': '#cc001f',
-            ink: '#000000',
-            'ink-soft': '#211922',
-            body: '#33332e',
-            mute: '#62625b',
-            ash: '#91918c',
-            stone: '#c8c8c1',
-            canvas: '#ffffff',
-            'surface-soft': '#fbfbf9',
-            'surface-card': '#f6f6f3',
-            hairline: '#dadad3',
-            'hairline-soft': '#e5e5e0',
+            bg: "#f4efe7",
+            panel: "#fffaf3",
+            panelSoft: "#f5ece0",
+            line: "#d9cdbb",
+            ink: "#17120f",
+            muted: "#62584d",
+            soft: "#8e7f72",
+            accent: "#c63d2f",
+            accentDark: "#9f2c21",
+            accentGold: "#b57a2a",
+            green: "#17694d",
+            blue: "#1f4f9c"
           },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
+          boxShadow: {
+            soft: "0 10px 30px rgba(23, 18, 15, 0.08)"
           }
         }
       }
     }
   </script>
   <style>
+    html {
+      scroll-behavior: smooth;
+    }
     body {
-      font-family: 'Inter', sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(198, 61, 47, 0.08), transparent 30%),
+        radial-gradient(circle at 90% 0%, rgba(181, 122, 42, 0.08), transparent 24%),
+        linear-gradient(180deg, #fbf7f0 0%, #f4efe7 100%);
     }
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
-      height: 4px;
+    .doc-scroll::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
+    .doc-scroll::-webkit-scrollbar-thumb {
+      background: #d9cdbb;
+      border-radius: 9999px;
+    }
+    .doc-scroll::-webkit-scrollbar-track {
       background: transparent;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #dadad3;
-      border-radius: 9999px;
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
     }
   </style>
 </head>
-<body class="bg-surface-soft text-body min-h-screen flex flex-col md:flex-row">
-
-  <!-- Mobile Top Header -->
-  <header class="md:hidden sticky top-0 z-50 bg-canvas border-b border-hairline h-16 flex items-center justify-between px-4 shrink-0">
-    <div class="flex items-center gap-2">
-      <span class="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-        <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] text-white" fill="none" stroke="currentColor" strokeWidth="2.4">
-          <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z" />
-          <circle cx="12" cy="18" r="2" />
-        </svg>
-      </span>
-      <span class="text-sm font-bold text-ink tracking-tight">ThoraxAI Manuals</span>
-    </div>
-    <button id="menu-btn" class="p-2 border border-hairline rounded-md bg-surface-card hover:bg-canvas transition-all" aria-label="Toggle Menu">
-      <svg class="w-5 h-5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-      </svg>
-    </button>
-  </header>
-
-  <!-- Navigation Sidebar -->
-  <aside id="sidebar" class="hidden md:flex fixed md:static inset-0 z-40 w-full md:w-64 bg-canvas border-r border-hairline flex-col shrink-0 transition-transform duration-300 md:translate-x-0">
-    <!-- Close Menu Button (Mobile) -->
-    <div class="md:hidden flex justify-end p-4 border-b border-hairline">
-      <button id="close-btn" class="p-2 border border-hairline rounded-md bg-surface-card" aria-label="Close Menu">
-        <svg class="w-5 h-5 text-ink" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-    </div>
-
-    <!-- Brand Header -->
-    <div class="h-16 hidden md:flex items-center px-6 border-b border-hairline">
-      <div class="flex items-center gap-2.5">
-        <span class="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
-          <svg viewBox="0 0 24 24" class="w-[18px] h-[18px] text-white" fill="none" stroke="currentColor" strokeWidth="2.4">
-            <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z" />
-            <circle cx="12" cy="18" r="2" />
-          </svg>
-        </span>
-        <span class="text-base font-bold text-ink tracking-tight">ThoraxAI Portal</span>
+<body class="text-ink">
+  <div class="min-h-screen">
+    <header class="sticky top-0 z-40 border-b border-line/80 bg-panel/90 backdrop-blur">
+      <div class="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <div class="min-w-0">
+          <p class="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted">ThoraxAI Manual</p>
+          <h1 class="truncate text-lg font-bold tracking-tight sm:text-xl">Project from scratch to production</h1>
+        </div>
+        <div class="flex items-center gap-2 text-xs font-semibold text-muted">
+          <span class="hidden rounded-full border border-line bg-panelSoft px-3 py-1 sm:inline">FastAPI</span>
+          <span class="hidden rounded-full border border-line bg-panelSoft px-3 py-1 sm:inline">React</span>
+          <span class="rounded-full border border-line bg-panelSoft px-3 py-1">Cloud Run</span>
+        </div>
       </div>
+    </header>
+
+    <div class="mx-auto grid max-w-[1500px] gap-0 lg:grid-cols-[300px_1fr]">
+      <aside class="border-b border-line/80 bg-panel lg:sticky lg:top-[57px] lg:h-[calc(100vh-57px)] lg:border-b-0 lg:border-r">
+        <div class="doc-scroll h-full overflow-y-auto px-4 py-5 sm:px-6 lg:px-5">
+          <div class="mb-6 rounded-2xl border border-line bg-[linear-gradient(180deg,#fffaf3, #f7efe3)] p-4 shadow-soft">
+            <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-muted">Quick Map</p>
+            <p class="mt-2 text-sm leading-6 text-muted">Everything needed to understand, run, and deploy the stack.</p>
+          </div>
+
+          <nav class="space-y-1 text-sm font-semibold">
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#overview">1. Overview</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#what-it-is">2. What it does</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#architecture">3. Architecture</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#stack">4. Tech stack</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#repo">5. Repository structure</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#workflow">6. End-to-end workflow</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#local-setup">7. Local setup</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#env">8. Environment variables</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#backend">9. Backend setup</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#frontend">10. Frontend setup</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#ai">11. AI pipeline</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#data">12. Data model</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#docker">13. Docker and Compose</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#prod">14. Production deployment</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#gcp">15. GCP / Terraform</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#release">16. Build and release</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#troubleshooting">17. Troubleshooting</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#security">18. Security notes</a>
+            <a class="block rounded-xl px-3 py-2 text-muted hover:bg-panelSoft hover:text-ink" href="#next">19. Next steps</a>
+          </nav>
+        </div>
+      </aside>
+
+      <main class="doc-scroll min-h-0 overflow-y-auto px-4 py-6 sm:px-6 lg:px-10 lg:py-10">
+        <section class="rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8 lg:p-10">
+          <div class="grid gap-8 lg:grid-cols-[1.3fr_0.7fr] lg:items-end">
+            <div>
+              <p class="text-[11px] font-bold uppercase tracking-[0.24em] text-accent">Full project manual</p>
+              <h2 class="mt-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">ThoraxAI</h2>
+              <p class="mt-4 max-w-3xl text-base leading-7 text-muted">
+                ThoraxAI is a multi-tenant chest X-ray platform for hospitals. It combines React, FastAPI, MongoDB,
+                Redis, PyTorch inference, Grad-CAM explainability, and serverless deployment on Google Cloud.
+                This guide covers the project from first principles through production deployment.
+              </p>
+              <div class="mt-6 flex flex-wrap gap-2 text-xs font-semibold">
+                <span class="rounded-full border border-line bg-panelSoft px-3 py-1">Multi-tenant SaaS</span>
+                <span class="rounded-full border border-line bg-panelSoft px-3 py-1">Chest X-ray AI</span>
+                <span class="rounded-full border border-line bg-panelSoft px-3 py-1">WebAuthn</span>
+                <span class="rounded-full border border-line bg-panelSoft px-3 py-1">Cloud Run</span>
+                <span class="rounded-full border border-line bg-panelSoft px-3 py-1">Firebase Hosting</span>
+              </div>
+            </div>
+            <div class="rounded-[20px] border border-line bg-[linear-gradient(180deg,#fff8ef, #f7ebe0)] p-5">
+              <p class="text-[10px] font-bold uppercase tracking-[0.24em] text-muted">Snapshot</p>
+              <dl class="mt-4 space-y-4 text-sm">
+                <div class="flex items-center justify-between gap-4 border-b border-line/70 pb-3">
+                  <dt class="text-muted">Backend</dt>
+                  <dd class="font-semibold">FastAPI + PyTorch</dd>
+                </div>
+                <div class="flex items-center justify-between gap-4 border-b border-line/70 pb-3">
+                  <dt class="text-muted">Frontend</dt>
+                  <dd class="font-semibold">React + Vite</dd>
+                </div>
+                <div class="flex items-center justify-between gap-4 border-b border-line/70 pb-3">
+                  <dt class="text-muted">Storage</dt>
+                  <dd class="font-semibold">MongoDB + Redis</dd>
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                  <dt class="text-muted">Deploy</dt>
+                  <dd class="font-semibold">Cloud Run + Firebase</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+        </section>
+
+        <section id="overview" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">1. Overview</h3>
+          <div class="mt-4 grid gap-4 lg:grid-cols-3">
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Problem</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Hospitals need an internal tool for X-ray triage, staff access, and explainable AI analysis without mixing tenant data.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Solution</p>
+              <p class="mt-2 text-sm leading-6 text-muted">A tenant-aware SaaS portal where doctors upload scans, run AI diagnosis, inspect Grad-CAM heatmaps, and read patient-friendly summaries.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Design goal</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Quiet operational software, not a marketing site. The interface is dense, predictable, and focused on repeated clinical tasks.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="what-it-is" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">2. What it does</h3>
+          <div class="mt-5 grid gap-6 lg:grid-cols-2">
+            <div>
+              <p class="text-sm leading-7 text-muted">
+                ThoraxAI supports hospital onboarding, invite-code staff enrollment, patient management, scan upload,
+                analysis, and result review. A hospital gets its own tenant context and data store. Doctors only see
+                scans within their hospital.
+              </p>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-muted">
+                <li><strong class="text-ink">Hospital admins:</strong> register a hospital, create invite codes, manage staff, and monitor the tenant.</li>
+                <li><strong class="text-ink">Doctors:</strong> manage patients, upload scans, trigger AI analysis, and review reports.</li>
+                <li><strong class="text-ink">Super admins:</strong> observe all hospitals across the platform.</li>
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-line bg-[linear-gradient(180deg,#fff8ef,#f7efe3)] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.24em] text-muted">Feature list</p>
+              <div class="mt-4 grid gap-3 text-sm">
+                <div class="rounded-xl border border-line bg-panel px-4 py-3">Database-per-tenant isolation</div>
+                <div class="rounded-xl border border-line bg-panel px-4 py-3">JWT plus WebAuthn passkey login</div>
+                <div class="rounded-xl border border-line bg-panel px-4 py-3">OTP email verification</div>
+                <div class="rounded-xl border border-line bg-panel px-4 py-3">Chest X-ray classification</div>
+                <div class="rounded-xl border border-line bg-panel px-4 py-3">Grad-CAM overlay generation</div>
+                <div class="rounded-xl border border-line bg-panel px-4 py-3">Audit log and rate-limit middleware</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="architecture" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">3. Architecture</h3>
+          <div class="mt-5 grid gap-4 lg:grid-cols-3">
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Frontend</p>
+              <p class="mt-2 text-sm leading-6 text-muted">React 19 SPA hosted on Firebase Hosting. It calls the backend through `VITE_API_BASE_URL` and includes auth token forwarding.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Backend</p>
+              <p class="mt-2 text-sm leading-6 text-muted">FastAPI app on Cloud Run. It resolves tenant context, talks to MongoDB and Redis, and runs PyTorch inference for scan analysis.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Data + AI</p>
+              <p class="mt-2 text-sm leading-6 text-muted">MongoDB stores app state, Redis handles ephemeral auth and rate-limit state, and model weights are loaded from the backend runtime or Hugging Face.</p>
+            </div>
+          </div>
+          <pre class="mt-5 overflow-x-auto rounded-2xl border border-line bg-[#fbf5ec] p-5 text-[12px] leading-6 text-muted"><code>User -> Firebase Hosting SPA -> FastAPI /api/v1 -> tenant resolver -> tenant MongoDB
+                                     -> scan upload -> AI pipeline -> Grad-CAM -> save result</code></pre>
+        </section>
+
+        <section id="stack" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">4. Tech stack</h3>
+          <div class="mt-5 overflow-hidden rounded-2xl border border-line">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-panelSoft text-xs uppercase tracking-[0.18em] text-muted">
+                <tr>
+                  <th class="px-4 py-3">Layer</th>
+                  <th class="px-4 py-3">Used</th>
+                  <th class="px-4 py-3">Why it is here</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line bg-panel">
+                <tr>
+                  <td class="px-4 py-4 font-semibold">Backend API</td>
+                  <td class="px-4 py-4 text-muted">FastAPI, Pydantic, Uvicorn</td>
+                  <td class="px-4 py-4 text-muted">Typed routes, async support, and simple request validation.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-4 font-semibold">AI</td>
+                  <td class="px-4 py-4 text-muted">PyTorch, torchvision, OpenCV, Pillow</td>
+                  <td class="px-4 py-4 text-muted">Chest X-ray inference and Grad-CAM overlay generation.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-4 font-semibold">Data</td>
+                  <td class="px-4 py-4 text-muted">MongoDB, Redis</td>
+                  <td class="px-4 py-4 text-muted">Persistent app data and short-lived auth / rate-limit state.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-4 font-semibold">Frontend</td>
+                  <td class="px-4 py-4 text-muted">React, Vite, Tailwind, Lucide</td>
+                  <td class="px-4 py-4 text-muted">Fast SPA delivery with a restrained clinical interface.</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-4 font-semibold">Deployment</td>
+                  <td class="px-4 py-4 text-muted">Docker, Cloud Run, Firebase Hosting, Terraform</td>
+                  <td class="px-4 py-4 text-muted">Reproducible serverless backend and static frontend hosting.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="repo" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">5. Repository structure</h3>
+          <div class="mt-5 grid gap-4 lg:grid-cols-2">
+            <pre class="overflow-x-auto rounded-2xl border border-line bg-[#fbf5ec] p-5 text-[12px] leading-6 text-muted"><code>backend/
+  core/        config, db, auth, middleware
+  routes/      auth, patient, scan, ai, tenants, admin
+  services/    email and shared helpers
+  scripts/     training and migration utilities
+  templates/   email templates
+
+frontend/
+  src/api/     API client wrappers
+  src/pages/   route screens
+  src/components/ UI building blocks
+  src/context/ auth state
+
+terraform/
+  main.tf      GCP infrastructure
+  variables.tf environment inputs</code></pre>
+            <div class="space-y-4">
+              <div class="rounded-2xl border border-line bg-panelSoft p-5">
+                <p class="text-sm font-bold">Important runtime files</p>
+                <p class="mt-2 text-sm leading-6 text-muted">Backend env files, model weights, uploads, and Terraform state are intentionally ignored or treated as runtime data.</p>
+              </div>
+              <div class="rounded-2xl border border-line bg-panelSoft p-5">
+                <p class="text-sm font-bold">Source of truth</p>
+                <p class="mt-2 text-sm leading-6 text-muted">The manual is paired with the backend, frontend, and Terraform config in this repo. The documentation here reflects the code currently in the workspace.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="workflow" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">6. End-to-end workflow</h3>
+          <div class="mt-5 grid gap-4 lg:grid-cols-4">
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-muted">Step 1</p>
+              <p class="mt-2 text-sm font-semibold">Register</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Hospital or doctor account creation with OTP verification and tenant assignment.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-muted">Step 2</p>
+              <p class="mt-2 text-sm font-semibold">Add data</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Doctors create patients and scan records, then upload the X-ray image.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-muted">Step 3</p>
+              <p class="mt-2 text-sm font-semibold">Analyze</p>
+              <p class="mt-2 text-sm leading-6 text-muted">The backend preprocesses the image, runs inference, and generates explainability output.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.2em] text-muted">Step 4</p>
+              <p class="mt-2 text-sm font-semibold">Review</p>
+              <p class="mt-2 text-sm leading-6 text-muted">The UI displays the diagnosis, probabilities, patient summary, and Grad-CAM heatmap.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="local-setup" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">7. Local setup</h3>
+          <div class="mt-5 grid gap-6 lg:grid-cols-2">
+            <div>
+              <p class="text-sm leading-7 text-muted">A local run uses two terminals: one for the backend and one for the frontend. MongoDB and Redis can be started with Docker Compose, or you can point the backend at hosted services.</p>
+              <ol class="mt-4 space-y-3 text-sm leading-6 text-muted">
+                <li><strong class="text-ink">1.</strong> Install Python 3.11, Node.js, Docker Desktop, and Git.</li>
+                <li><strong class="text-ink">2.</strong> Create backend and frontend `.env` files from the examples in the repo.</li>
+                <li><strong class="text-ink">3.</strong> Install backend dependencies with `pip install -r requirements.txt`.</li>
+                <li><strong class="text-ink">4.</strong> Install frontend dependencies with `npm install`.</li>
+                <li><strong class="text-ink">5.</strong> Run backend and frontend in separate terminals.</li>
+              </ol>
+            </div>
+            <div class="rounded-2xl border border-line bg-[#fbf5ec] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-muted">Typical commands</p>
+              <pre class="mt-4 overflow-x-auto text-[12px] leading-6 text-muted"><code># backend
+cd backend
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+
+# frontend
+cd frontend
+npm install
+npm run dev</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="env" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">8. Environment variables</h3>
+          <p class="mt-4 text-sm leading-7 text-muted">The backend loads configuration from `backend/.env` or deployment secrets. The frontend uses `frontend/.env` for local development and `frontend/.env.production` for the production build.</p>
+          <div class="mt-5 overflow-hidden rounded-2xl border border-line">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-panelSoft text-xs uppercase tracking-[0.18em] text-muted">
+                <tr>
+                  <th class="px-4 py-3">Variable</th>
+                  <th class="px-4 py-3">Where</th>
+                  <th class="px-4 py-3">Purpose</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line bg-panel">
+                <tr><td class="px-4 py-4 font-semibold">DATABASE_URL</td><td class="px-4 py-4 text-muted">Backend</td><td class="px-4 py-4 text-muted">MongoDB connection string</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">REDIS_URL</td><td class="px-4 py-4 text-muted">Backend</td><td class="px-4 py-4 text-muted">Redis cache / token state</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">JWT_SECRET_KEY</td><td class="px-4 py-4 text-muted">Backend</td><td class="px-4 py-4 text-muted">JWT signing secret</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">HF_TOKEN</td><td class="px-4 py-4 text-muted">Backend</td><td class="px-4 py-4 text-muted">Optional Hugging Face access token</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">HF_MODEL_REPO</td><td class="px-4 py-4 text-muted">Backend</td><td class="px-4 py-4 text-muted">Remote checkpoint source</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">GROQ_API_KEY</td><td class="px-4 py-4 text-muted">Backend</td><td class="px-4 py-4 text-muted">LLM explanation generation</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">VITE_API_BASE_URL</td><td class="px-4 py-4 text-muted">Frontend</td><td class="px-4 py-4 text-muted">Backend base URL for browser API calls</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">VITE_BASE_DOMAIN</td><td class="px-4 py-4 text-muted">Frontend</td><td class="px-4 py-4 text-muted">Tenant subdomain routing base</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="backend" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">9. Backend setup</h3>
+          <div class="mt-5 grid gap-6 lg:grid-cols-2">
+            <div>
+              <p class="text-sm leading-7 text-muted">The backend is a FastAPI application with separate route groups for auth, tenants, users, patients, scans, and AI analysis. Startup verifies MongoDB and Redis connectivity and creates indexes before serving traffic.</p>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-muted">
+                <li><strong class="text-ink">core/settings.py:</strong> central configuration and validation.</li>
+                <li><strong class="text-ink">core/events.py:</strong> startup/shutdown lifecycle hooks.</li>
+                <li><strong class="text-ink">core/middleware:</strong> tenant resolution, rate limiting, audit logging.</li>
+                <li><strong class="text-ink">routes/ai:</strong> preprocessing, inference, Grad-CAM, patient summary logic.</li>
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-line bg-[#fbf5ec] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-muted">Backend boot sequence</p>
+              <pre class="mt-4 overflow-x-auto text-[12px] leading-6 text-muted"><code>1. Load settings and secrets
+2. Connect to MongoDB
+3. Ping Redis
+4. Ensure indexes
+5. Start Uvicorn
+6. Resolve tenant on each request</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="frontend" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">10. Frontend setup</h3>
+          <div class="mt-5 grid gap-6 lg:grid-cols-2">
+            <div>
+              <p class="text-sm leading-7 text-muted">The frontend is a Vite SPA. It handles authentication, tenant subdomain forwarding, scan management screens, and result presentation. The API wrapper automatically injects bearer tokens and tenant headers.</p>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-muted">
+                <li><strong class="text-ink">src/api/client.js:</strong> request wrapper, refresh flow, timeout handling.</li>
+                <li><strong class="text-ink">src/api/scans.js:</strong> scan and AI endpoint helpers.</li>
+                <li><strong class="text-ink">src/pages/dashboard:</strong> scan detail, patient screens, roster, settings.</li>
+                <li><strong class="text-ink">src/context/AuthContext.jsx:</strong> user session bootstrap.</li>
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-line bg-[#fbf5ec] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-muted">Build commands</p>
+              <pre class="mt-4 overflow-x-auto text-[12px] leading-6 text-muted"><code>npm install
+npm run dev
+npm run build
+npm run lint</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="ai" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">11. AI pipeline</h3>
+          <p class="mt-4 text-sm leading-7 text-muted">The AI path is a synchronous request that can be expensive. It preprocesses the X-ray, loads or downloads the body-part-specific checkpoint, runs inference, generates a Grad-CAM overlay, and enriches the result with a patient-friendly explanation.</p>
+          <div class="mt-5 grid gap-4 lg:grid-cols-5">
+            <div class="rounded-2xl border border-line bg-panelSoft p-4 text-sm">
+              <p class="font-bold">1. Preprocess</p>
+              <p class="mt-2 text-muted">Resize to 224x224, grayscale to 3 channels, normalize.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-4 text-sm">
+              <p class="font-bold">2. Load model</p>
+              <p class="mt-2 text-muted">Load fine-tuned `chest.pth` or download from HF if absent.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-4 text-sm">
+              <p class="font-bold">3. Predict</p>
+              <p class="mt-2 text-muted">DenseNet121 returns class probabilities and confidence.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-4 text-sm">
+              <p class="font-bold">4. Explain</p>
+              <p class="mt-2 text-muted">Grad-CAM highlights the image regions driving the prediction.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-4 text-sm">
+              <p class="font-bold">5. Persist</p>
+              <p class="mt-2 text-muted">Save AI result back to the tenant scan document.</p>
+            </div>
+          </div>
+          <pre class="mt-5 overflow-x-auto rounded-2xl border border-line bg-[#fbf5ec] p-5 text-[12px] leading-6 text-muted"><code>routes/ai/service.py -> preprocessing.py -> inference.py -> gradcam.py -> llm.py -> save_ai_result()</code></pre>
+        </section>
+
+        <section id="data" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">12. Data model</h3>
+          <div class="mt-5 grid gap-4 lg:grid-cols-2">
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Master database</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Houses hospitals, global users, auth records, and audit logs. This database is shared across the platform.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Tenant database</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Houses patients and scans for a single hospital. Every request is resolved into one tenant database only.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="docker" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">13. Docker and Compose</h3>
+          <p class="mt-4 text-sm leading-7 text-muted">The backend container installs PyTorch CPU wheels, builds the FastAPI app, and exposes port 8000. Docker Compose wires together the API, MongoDB, and Redis for local development.</p>
+          <div class="mt-5 grid gap-4 lg:grid-cols-2">
+            <pre class="overflow-x-auto rounded-2xl border border-line bg-[#fbf5ec] p-5 text-[12px] leading-6 text-muted"><code># backend Docker image
+cd backend
+docker build -t thoraxai-backend:local .
+
+# local stack
+docker compose up --build</code></pre>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5 text-sm leading-6 text-muted">
+              The backend `.dockerignore` excludes temporary caches, uploads, and local-only runtime output so the image stays predictable. Fine-tuned weights are handled by the production build or runtime download path, not by ad hoc local state.
+            </div>
+          </div>
+        </section>
+
+        <section id="prod" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">14. Production deployment</h3>
+          <div class="mt-5 grid gap-6 lg:grid-cols-2">
+            <div>
+              <p class="text-sm leading-7 text-muted">Production uses Google Cloud Run for the backend and Firebase Hosting for the frontend. The backend requires database and cache secrets, plus enough CPU and memory for inference.</p>
+              <ul class="mt-4 space-y-3 text-sm leading-6 text-muted">
+                <li><strong class="text-ink">Backend:</strong> Cloud Run container with 2 CPU, 4Gi memory, 300s timeout, concurrency 1.</li>
+                <li><strong class="text-ink">Frontend:</strong> Firebase Hosting serves the `dist/` bundle.</li>
+                <li><strong class="text-ink">Secrets:</strong> stored in Secret Manager and passed to Cloud Run.</li>
+                <li><strong class="text-ink">Files:</strong> scan uploads live in a mounted storage bucket.</li>
+              </ul>
+            </div>
+            <div class="rounded-2xl border border-line bg-[#fbf5ec] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-muted">Release sequence</p>
+              <pre class="mt-4 overflow-x-auto text-[12px] leading-6 text-muted"><code>1. Build backend image
+2. Push to Artifact Registry
+3. Apply Terraform
+4. Deploy Cloud Run revision
+5. Build frontend
+6. Deploy Firebase Hosting</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="gcp" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">15. GCP and Terraform</h3>
+          <p class="mt-4 text-sm leading-7 text-muted">Terraform manages Cloud Run, Artifact Registry, Secret Manager, Firebase project setup, storage bucket access, and IAM bindings. The live config should be treated as the source of truth for deployment behavior.</p>
+          <div class="mt-5 grid gap-4 lg:grid-cols-3">
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Core resources</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Cloud Run service, service account, secrets, and storage bucket.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Frontend hosting</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Firebase Hosting site and rewrite rules for SPA routing.</p>
+            </div>
+            <div class="rounded-2xl border border-line bg-panelSoft p-5">
+              <p class="text-sm font-bold">Operational note</p>
+              <p class="mt-2 text-sm leading-6 text-muted">Do not commit Terraform state or local `.terraform` artifacts.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="release" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">16. Build and release</h3>
+          <div class="mt-5 grid gap-6 lg:grid-cols-2">
+            <div class="rounded-2xl border border-line bg-[#fbf5ec] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-muted">Frontend release</p>
+              <pre class="mt-4 overflow-x-auto text-[12px] leading-6 text-muted"><code>cd frontend
+npm install
+npm run build
+npx firebase deploy --only hosting --project thorax-ai-analyzer</code></pre>
+            </div>
+            <div class="rounded-2xl border border-line bg-[#fbf5ec] p-5">
+              <p class="text-xs font-bold uppercase tracking-[0.22em] text-muted">Backend release</p>
+              <pre class="mt-4 overflow-x-auto text-[12px] leading-6 text-muted"><code>cd backend
+docker build -t REGION-docker.pkg.dev/PROJECT/REPO/backend:latest .
+docker push REGION-docker.pkg.dev/PROJECT/REPO/backend:latest
+gcloud run services update SERVICE --region REGION</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="troubleshooting" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">17. Troubleshooting</h3>
+          <div class="mt-5 overflow-hidden rounded-2xl border border-line">
+            <table class="w-full text-left text-sm">
+              <thead class="bg-panelSoft text-xs uppercase tracking-[0.18em] text-muted">
+                <tr>
+                  <th class="px-4 py-3">Symptom</th>
+                  <th class="px-4 py-3">Likely cause</th>
+                  <th class="px-4 py-3">What to check</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-line bg-panel">
+                <tr><td class="px-4 py-4 font-semibold">Analysis fails in production</td><td class="px-4 py-4 text-muted">Out of memory or timeout during inference</td><td class="px-4 py-4 text-muted">Cloud Run memory, concurrency, and logs</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">Frontend cannot reach API</td><td class="px-4 py-4 text-muted">Wrong `VITE_API_BASE_URL`</td><td class="px-4 py-4 text-muted">`.env.production` and Firebase build output</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">401 loops</td><td class="px-4 py-4 text-muted">Expired refresh token or auth config mismatch</td><td class="px-4 py-4 text-muted">Auth headers and backend JWT settings</td></tr>
+                <tr><td class="px-4 py-4 font-semibold">Scan image missing</td><td class="px-4 py-4 text-muted">Upload path or mounted storage issue</td><td class="px-4 py-4 text-muted">Uploads bucket, file path, and permissions</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="security" class="mt-8 rounded-[24px] border border-line bg-panel p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">18. Security notes</h3>
+          <ul class="mt-4 space-y-3 text-sm leading-6 text-muted">
+            <li><strong class="text-ink">Tenant isolation:</strong> the backend resolves a tenant database before any protected operation.</li>
+            <li><strong class="text-ink">Secrets:</strong> production credentials belong in Secret Manager, not in the repo.</li>
+            <li><strong class="text-ink">Uploads:</strong> scan files must stay inside the configured upload root.</li>
+            <li><strong class="text-ink">Auth:</strong> access tokens and refresh tokens are handled separately and stored in browser local storage for the SPA.</li>
+            <li><strong class="text-ink">Rate limiting:</strong> middleware protects public and authenticated paths from bursts.</li>
+          </ul>
+        </section>
+
+        <section id="next" class="mt-8 mb-4 rounded-[24px] border border-line bg-[linear-gradient(180deg,#fff8ef,#f7ebe0)] p-6 shadow-soft sm:p-8">
+          <h3 class="text-2xl font-bold tracking-tight">19. Next steps</h3>
+          <p class="mt-4 text-sm leading-7 text-muted">If you want to keep this manual current, the next useful additions are a generated API reference, screenshots of the dashboard, and a deployment checklist tied to the live Cloud Run and Firebase resources.</p>
+        </section>
+      </main>
     </div>
-
-    <!-- Navigation List -->
-    <nav class="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
-      <p class="text-[10px] font-bold text-ash uppercase tracking-widest px-3 mb-2">Documentation</p>
-      <button onclick="switchTab('project_overview')" id="tab-project_overview" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 bg-surface-card text-primary">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
-        Project Overview
-      </button>
-      <button onclick="switchTab('multi_tenancy')" id="tab-multi_tenancy" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-        Multi-Tenancy
-      </button>
-      <button onclick="switchTab('auth_flow')" id="tab-auth_flow" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-        Authentication Flow
-      </button>
-      <button onclick="switchTab('api_endpoints')" id="tab-api_endpoints" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-        API Endpoints
-      </button>
-      <button onclick="switchTab('backend_overview')" id="tab-backend_overview" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
-        Backend Overview
-      </button>
-      <button onclick="switchTab('frontend_overview')" id="tab-frontend_overview" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-        Frontend Overview
-      </button>
-      <button onclick="switchTab('deployment')" id="tab-deployment" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
-        Local Deployment
-      </button>
-      <button onclick="switchTab('gcp_deployment')" id="tab-gcp_deployment" class="w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4 4 0 003 15z"/></svg>
-        GCP Deployment (IaC)
-      </button>
-    </nav>
-  </aside>
-
-  <!-- Main Content Area -->
-  <main class="flex-1 min-h-0 flex flex-col p-4 sm:p-6 md:p-10 max-w-5xl mx-auto w-full">
-    <div id="content" class="bg-canvas border border-hairline rounded-md p-6 sm:p-8 md:p-12 shadow-sm animate-fade-in space-y-8">
-      <!-- Loaded dynamically via switchTab -->
-    </div>
-  </main>
-
-  <script>
-    // Embedded Manuals Content
-    const manuals = {
-      project_overview: {
-        title: "Project Overview",
-        subtitle: "A high-level understanding of the ThoraxAI platform.",
-        content: `
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">What is this?</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            A multi-tenant SaaS platform where hospitals register, onboard doctors, and use AI to analyze chest X-ray images. Each hospital gets its own isolated database — guaranteeing zero data leaks between different medical institutions.
-          </p>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Target Users</h3>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-            <div class="bg-surface-card border border-hairline-soft rounded-md p-4">
-              <p class="text-xs font-bold text-ink mb-1">Hospital Admins</p>
-              <p class="text-[11px] text-mute leading-normal font-semibold">Register their hospital, manage the doctor roster, view statistics, and regenerate registration invite codes.</p>
-            </div>
-            <div class="bg-surface-card border border-hairline-soft rounded-md p-4">
-              <p class="text-xs font-bold text-ink mb-1">Doctors</p>
-              <p class="text-[11px] text-mute leading-normal font-semibold">Manage patients (CRUD), upload X-ray scans, trigger chest AI analysis, and query the diagnostic RAG pipeline.</p>
-            </div>
-            <div class="bg-surface-card border border-hairline-soft rounded-md p-4">
-              <p class="text-xs font-bold text-ink mb-1">Super Admins</p>
-              <p class="text-[11px] text-mute leading-normal font-semibold">Oversee all registered hospitals, monitor active subdomains, and inspect user profiles platform-wide.</p>
-            </div>
-          </div>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Core Features</h3>
-          <ul class="space-y-2.5 mb-6">
-            <li class="flex items-start gap-2.5 text-[13px] leading-relaxed"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span class="font-semibold text-ink-soft"><strong>Multi-tenant isolation</strong>: true database-per-hospital architecture.</span></li>
-            <li class="flex items-start gap-2.5 text-[13px] leading-relaxed"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span class="font-semibold text-ink-soft"><strong>Modern authentication</strong>: JWT Bearer auth + WebAuthn passkey (biometric face/fingerprint) login.</span></li>
-            <li class="flex items-start gap-2.5 text-[13px] leading-relaxed"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span class="font-semibold text-ink-soft"><strong>Registration validation</strong>: OTP code verification via email SMTP.</span></li>
-            <li class="flex items-start gap-2.5 text-[13px] leading-relaxed"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span class="font-semibold text-ink-soft"><strong>AI chest model</strong>: DenseNet121 triggers Grad-CAM visualization heatmaps for Pneumonia vs Normal diagnosis.</span></li>
-            <li class="flex items-start gap-2.5 text-[13px] leading-relaxed"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span class="font-semibold text-ink-soft"><strong>Staff recruitment</strong>: Secure invite-code system for doctor self-onboarding.</span></li>
-          </ul>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Tech Stack Overview</h3>
-          <table class="w-full text-left border-collapse border border-hairline-soft rounded-md overflow-hidden text-xs font-semibold mb-6">
-            <thead class="bg-surface-card border-b border-hairline-soft">
-              <tr>
-                <th class="p-3">Layer</th>
-                <th class="p-3">Technologies</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-hairline-soft">
-              <tr>
-                <td class="p-3 text-ink">Backend API</td>
-                <td class="p-3 text-mute">FastAPI, Python 3.11, Motor (MongoDB), Redis Cache</td>
-              </tr>
-              <tr>
-                <td class="p-3 text-ink">Frontend App</td>
-                <td class="p-3 text-mute">React 19, Vite 8, Tailwind CSS, Lucide Icons, Framer Motion</td>
-              </tr>
-              <tr>
-                <td class="p-3 text-ink">Deployment</td>
-                <td class="p-3 text-mute">Docker containers, Docker Compose, Volume mounts, S3 (optional)</td>
-              </tr>
-            </tbody>
-          </table>
-        `
-      },
-      multi_tenancy: {
-        title: "Multi-Tenancy Architecture",
-        subtitle: "How database isolation and subdomain routing work in harmony.",
-        content: `
-          <div class="bg-surface-card border border-hairline-soft rounded-md p-5 mb-6 text-xs font-mono text-ink-soft">
-            public_master_db &rarr; users, hospitals, audit_logs<br>
-            tenant_db_&lt;hospital_id&gt; &rarr; patients, scans
-          </div>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Subdomain Resolution Flow</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            Each hospital gets a unique subdomain slug derived from their name (e.g. <code>http://st-marys.localhost:5173</code>). 
-            During registration, the backend slugifies the name, checks for uniqueness, provisions the tenant Mongo databases, and returns the target URL.
-          </p>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Request Cycle</h3>
-          <ol class="space-y-3 mb-6 text-xs font-semibold text-body">
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">1</span><span class="mt-0.5">Request is sent from client subdomain (e.g. <code>hospital-a.localhost:5173</code>).</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">2</span><span class="mt-0.5"><code>TenantResolverMiddleware</code> parses the hostname (or fallback <code>X-Tenant-Subdomain</code> header in development).</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">3</span><span class="mt-0.5">Middleware fetches the matching hospital from the master database and caches the slug config in Redis.</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">4</span><span class="mt-0.5">FASTAPI dependency <code>get_tenant_db</code> resolves the isolated MongoDB client database for that tenant.</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">5</span><span class="mt-0.5">Security dependency verifies that the user's JWT <code>tenant_id</code> claim matches the subdomain <code>tenant_id</code> to enforce isolation boundaries.</span></li>
-          </ol>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Database Architecture</h3>
-          <table class="w-full text-left border-collapse border border-hairline-soft rounded-md overflow-hidden text-xs font-semibold">
-            <thead class="bg-surface-card border-b border-hairline-soft">
-              <tr>
-                <th class="p-3">Database</th>
-                <th class="p-3">Collections</th>
-                <th class="p-3">Fields / Indexes</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-hairline-soft">
-              <tr>
-                <td class="p-3 text-primary">Master Public DB</td>
-                <td class="p-3 text-ink">hospitals<br>users<br>audit_logs</td>
-                <td class="p-3 text-mute">hospital_id (index), invite_code, email (unique), passkeys</td>
-              </tr>
-              <tr>
-                <td class="p-3 text-emerald-700">Tenant Isolated DB</td>
-                <td class="p-3 text-ink">patients<br>scans</td>
-                <td class="p-3 text-mute">patient_id (unique), scan_id (unique), image_path, ai_result</td>
-              </tr>
-            </tbody>
-          </table>
-        `
-      },
-      auth_flow: {
-        title: "Authentication Flow",
-        subtitle: "How secure OTP, passwordless passkeys, and cross-subdomain logins behave.",
-        content: `
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Sign-Up & Activation</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            Users select a role during sign-up. Admins input a hospital name (which spawns a tenant), while doctors provide an invite code. 
-            An OTP code is dispatched via email and verified. Once verified, the tokens are loaded, and the user is redirected to their tenant portal.
-          </p>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Biometric Passkey Authentication</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            Hospitals require fast, secure, HIPAA-compliant access. Doctors can register biometrics (Face ID, Touch ID, or fingerprint). 
-            Passkeys use WebAuthn credentials to authenticate. The server stores the public key, issues cryptographic challenges, and verifies browser assertions to grant JWT tokens.
-          </p>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Secure Cross-Origin Redirection</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            Because browser <code>localStorage</code> is sandboxed per origin, when a user logs in on the main domain (e.g. <code>localhost:5173</code>) and is redirected to their subdomain (e.g. <code>hospital.localhost:5173</code>), the token is lost.
-            <br><br>
-            To prevent this, the client safely forwards the access and refresh tokens via query parameters on redirect (<code>/login?token=...&refresh_token=...</code>). The target portal captures the parameters on load, writes them into the subdomain's <code>localStorage</code>, immediately clears the URL queries, and activates the dashboard session.
-          </p>
-        `
-      },
-      api_endpoints: {
-        title: "API Endpoints Reference",
-        subtitle: "FastAPI REST API v1 routing list.",
-        content: `
-          <div class="space-y-6">
-            <div>
-              <p class="text-[10px] font-bold text-ash uppercase tracking-wider mb-2">Authentication (/api/v1/auth)</p>
-              <div class="bg-surface-card border border-hairline-soft rounded-md divide-y divide-hairline-soft text-xs font-semibold text-body">
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/register</span><span class="text-mute">Registers a new hospital or doctor</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/verify-otp</span><span class="text-mute">Verifies email OTP to activate account</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/login</span><span class="text-mute">Logs user in (generates JWT tokens)</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/refresh</span><span class="text-mute">Obtains new access token via refresh token</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-blue-50 text-blue-800 rounded font-bold">GET</span><span class="font-mono flex-1">/me</span><span class="text-mute">Fetches active profile context</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/logout</span><span class="text-mute">Blacklists token in Redis & signs out</span></div>
-              </div>
-            </div>
-
-            <div>
-              <p class="text-[10px] font-bold text-ash uppercase tracking-wider mb-2">Patients (/api/v1/patients)</p>
-              <div class="bg-surface-card border border-hairline-soft rounded-md divide-y divide-hairline-soft text-xs font-semibold text-body">
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-blue-50 text-blue-800 rounded font-bold">GET</span><span class="font-mono flex-1">/</span><span class="text-mute">Lists all patients inside active tenant database</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/</span><span class="text-mute">Creates a new patient record</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-blue-50 text-blue-800 rounded font-bold">GET</span><span class="font-mono flex-1">/{patient_id}</span><span class="text-mute">Fetches single patient data</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-amber-50 text-amber-800 rounded font-bold">PATCH</span><span class="font-mono flex-1">/{patient_id}</span><span class="text-mute">Updates patient information</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-red-50 text-red-800 rounded font-bold">DELETE</span><span class="font-mono flex-1">/{patient_id}</span><span class="text-mute">Removes patient and historical scans</span></div>
-              </div>
-            </div>
-
-            <div>
-              <p class="text-[10px] font-bold text-ash uppercase tracking-wider mb-2">Scans & AI Analysis (/api/v1/scans & /api/v1/ai)</p>
-              <div class="bg-surface-card border border-hairline-soft rounded-md divide-y divide-hairline-soft text-xs font-semibold text-body">
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/scans/</span><span class="text-mute">Initiates a scan record</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/scans/{scan_id}/upload</span><span class="text-mute">Uploads X-ray image file</span></div>
-                <div class="p-3 flex items-center gap-4"><span class="w-14 text-center py-0.5 bg-emerald-50 text-emerald-800 rounded font-bold">POST</span><span class="font-mono flex-1">/ai/analyze</span><span class="text-mute">Runs DenseNet121 and triggers Grad-CAM generation</span></div>
-              </div>
-            </div>
-          </div>
-        `
-      },
-      backend_overview: {
-        title: "Backend Architecture",
-        subtitle: "Technical structure of the FastAPI multi-tenant API.",
-        content: `
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Backend Layout</h3>
-          <div class="bg-surface-card border border-hairline-soft rounded-md p-5 mb-6 text-xs font-mono leading-relaxed text-body">
-            backend/<br>
-            ├── core/<br>
-            │   ├── database.py       <span class="text-mute">&larr; MongoDB connection pool</span><br>
-            │   ├── dependencies.py   <span class="text-mute">&larr; FastAPI route access rules / auth guards</span><br>
-            │   ├── security.py       <span class="text-mute">&larr; JWT coding, hash verifications</span><br>
-            │   ├── redis_client.py   <span class="text-mute">&larr; Redis connector (OTP limits, token blacklist)</span><br>
-            │   └── middleware/       <span class="text-mute">&larr; RateLimit, AuditLog, TenantResolver</span><br>
-            ├── routes/<br>
-            │   ├── auth/             <span class="text-mute">&larr; Login, WebAuthn registry, OTP triggers</span><br>
-            │   ├── scan/             <span class="text-mute">&larr; Scan CRUD</span><br>
-            │   ├── ai/               <span class="text-mute">&larr; AI orchestrator logic</span><br>
-            │   └── tenants/          <span class="text-mute">&larr; Hospital records</span><br>
-            └── services/<br>
-                └── email.py          <span class="text-mute">&larr; SMTP email dispatching</span>
-          </div>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">AI Diagnostics Orchestration</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            When a doctor runs analysis on a scan, the AI orchestrator:
-            <br>
-            1. Fetches the image tensor and normalizes it.
-            <br>
-            2. Pulls the target model weights (Chest DenseNet121) from the local storage.
-            <br>
-            3. Computes probability scores for <strong>Normal vs Pneumonia</strong>.
-            <br>
-            4. Executes backpropagation on the last convolutional layer to compute heat gradients, writing a visual Grad-CAM heatmap overlay.
-          </p>
-        `
-      },
-      frontend_overview: {
-        title: "Frontend Architecture",
-        subtitle: "Technical structure of the React Single Page Application (SPA).",
-        content: `
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Structure</h3>
-          <div class="bg-surface-card border border-hairline-soft rounded-md p-5 mb-6 text-xs font-mono leading-relaxed text-body">
-            frontend/src/<br>
-            ├── api/<br>
-            │   ├── client.js         <span class="text-mute">&larr; Axios wrapper. Forward subdomains via X-Tenant-Subdomain</span><br>
-            │   └── auth.js           <span class="text-mute">&larr; Authentication APIs</span><br>
-            ├── context/<br>
-            │   └── AuthContext.jsx   <span class="text-mute">&larr; Global auth provider (user reload, local tokens)</span><br>
-            ├── components/<br>
-            │   ├── ui/               <span class="text-mute">&larr; Reusable items (Badge, Modal, ConfirmDialog)</span><br>
-            │   └── Sidebar.jsx       <span class="text-mute">&larr; Navigation shell (desktop sidebar, mobile bottom tabs)</span><br>
-            └── pages/<br>
-                ├── Auth.jsx          <span class="text-mute">&larr; Register, Login, Passkey SSO logic</span><br>
-                └── dashboard/        <span class="text-mute">&larr; Protected routes (Overview, Patients, Scans, Settings)</span>
-          </div>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Responsive Layout Rules</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            We employ a responsive design strategy to ensure optimal layout scaling on any viewport:
-            <br>
-            - <strong>Mobile viewports (&lt; 768px)</strong>: Displays a mobile header top bar, hamburger navigation drawer, and bottom navigation bar, hiding the desktop sidebar. Page list paddings scale down to <code>px-4</code> to preserve space, and text sections truncate to avoid horizontal wrapping.
-            <br>
-            - <strong>Desktop viewports (&gt;= 768px)</strong>: Restores the wide 60-character sidebar, resets normal page spacing, and formats layout boxes horizontally.
-          </p>
-        `
-      },
-      deployment: {
-        title: "Deployment Guide",
-        subtitle: "How to run the stack locally or configure it for production release.",
-        content: `
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Local Setup</h3>
-          <div class="bg-surface-card border border-hairline-soft rounded-md p-5 mb-6 text-xs font-mono text-ink-soft space-y-2">
-            <p class="text-[10px] font-bold text-ash uppercase tracking-wider">Step 1: Start Backend (Docker Compose)</p>
-            <p>cd backend && docker compose up --build -d</p>
-            <br>
-            <p class="text-[10px] font-bold text-ash uppercase tracking-wider">Step 2: Start Frontend (Vite Server)</p>
-            <p>cd frontend && npm install && npm run dev</p>
-          </div>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Docker Compose Services</h3>
-          <ul class="space-y-2 mb-6 text-xs font-semibold text-body">
-            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span><strong>api</strong>: FastAPI application running on port <code>8000</code>.</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span><strong>mongodb</strong>: MongoDB v7 database server running on port <code>27017</code>.</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 shrink-0"></span><span><strong>redis</strong>: Redis cache running on port <code>6379</code>.</span></li>
-          </ul>
-
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Production Tasks</h3>
-          <ol class="space-y-2.5 mb-6 text-xs font-semibold text-body">
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">1</span><span class="mt-0.5">Change <code>JWT_SECRET_KEY</code> to a strong random value in production.</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">2</span><span class="mt-0.5">Use an isolated MongoDB replica set or managed provider (Atlas).</span></li>
-            <li class="flex items-start gap-2.5"><span class="w-5 h-5 bg-surface-card border border-hairline rounded-full flex items-center justify-center text-[10px]">3</span><span class="mt-0.5">Deploy the frontend static bundle: run <code>npm run build</code> and host the <code>dist/</code> folder.</span></li>
-          </ol>
-        `
-      },
-      gcp_deployment: {
-        title: "GCP Serverless Deployment",
-        subtitle: "Deploy the backend to Google Cloud using Terraform and Cloud Run.",
-        content: `
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Serverless Architecture</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            ThoraxAI is deployed to GCP in a highly optimized serverless layout to minimize cost:
-            <br>
-            - <strong>Google Cloud Run</strong>: Hosts the FastAPI app inside a serverless container. Scaled to zero when idle.
-            <br>
-            - <strong>GCP Secret Manager</strong>: Securely injects DB URIs, API tokens, and JWT keys as environment variables.
-            <br>
-            - <strong>GCP Artifact Registry</strong>: Manages private Docker image builds.
-            <br>
-            - <strong>MongoDB Atlas + Upstash Redis</strong>: Database and Cache systems running on free serverless cloud tiers (connected via public SSL with <code>0.0.0.0/0</code> Atlas whitelisting).
-          </p>
-          
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Pre-requisites</h3>
-          <ul class="space-y-1 mb-6 text-xs font-semibold text-body">
-            <li>1. Google Cloud SDK (gcloud CLI)</li>
-            <li>2. Terraform CLI</li>
-            <li>3. Docker Desktop</li>
-          </ul>
-          
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Step-by-Step Provisioning</h3>
-          <div class="bg-surface-card border border-hairline-soft rounded-md p-5 mb-6 text-xs font-mono text-ink-soft space-y-2">
-            <p class="text-[10px] font-bold text-ash uppercase tracking-wider">Step 1: Authenticate with Google Cloud</p>
-            <p>gcloud auth login</p>
-            <p>gcloud config set project thorax-ai-analyzer</p>
-            <p>gcloud auth application-default login</p>
-            <br>
-            <p class="text-[10px] font-bold text-ash uppercase tracking-wider">Step 2: Configure Environment Variables</p>
-            <p># Copy terraform.tfvars.example to terraform.tfvars and fill in your keys (DB strings, HF token, Groq key)</p>
-            <br>
-            <p class="text-[10px] font-bold text-ash uppercase tracking-wider">Step 3: Initialize and Provision Resources</p>
-            <p>cd terraform</p>
-            <p>terraform init</p>
-            <p>terraform apply</p>
-            <br>
-            <p class="text-[10px] font-bold text-ash uppercase tracking-wider">Step 4: Build and Push Docker Image</p>
-            <p># Authenticate local Docker daemon with GCP</p>
-            <p>gcloud auth configure-docker us-central1-docker.pkg.dev --quiet</p>
-            <p># Build image locally</p>
-            <p>cd ../backend</p>
-            <p>docker build -t us-central1-docker.pkg.dev/thorax-ai-analyzer/thoraxai-backend-repo/backend:latest .</p>
-            <p># Push and Deploy</p>
-            <p>docker push us-central1-docker.pkg.dev/thorax-ai-analyzer/thoraxai-backend-repo/backend:latest</p>
-            <p>cd ../terraform && terraform apply</p>
-          </div>
-          
-          <h3 class="text-sm font-bold uppercase tracking-wider text-ash mb-3">Tearing Down (Cleanup)</h3>
-          <p class="text-sm leading-relaxed mb-6 font-medium text-body">
-            To destroy the provisioned services and avoid running charges, run the clean up command in the <code>terraform/</code> directory:
-            <br>
-            <code>terraform destroy</code>
-          </p>
-        `
-      }
-    };
-
-    // Tab Switching Logic
-    function switchTab(tabId) {
-      // Deactivate all tabs
-      Object.keys(manuals).forEach(id => {
-        const btn = document.getElementById(`tab-${id}`);
-        if (btn) {
-          btn.className = "w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 text-mute hover:bg-surface-card/50 hover:text-ink";
-        }
-      });
-
-      // Activate active tab button
-      const activeBtn = document.getElementById(`tab-${tabId}`);
-      if (activeBtn) {
-        activeBtn.className = "w-full text-left px-3 py-2 rounded-md text-xs font-bold transition-all flex items-center gap-2.5 bg-surface-card text-primary";
-      }
-
-      // Load content
-      const contentDiv = document.getElementById("content");
-      const manual = manuals[tabId];
-      if (manual && contentDiv) {
-        contentDiv.innerHTML = `
-          <div>
-            <h1 class="text-2xl sm:text-[32px] font-bold text-ink tracking-[-1.2px] leading-none mb-1.5">${manual.title}</h1>
-            <p class="text-sm text-mute font-medium">${manual.subtitle}</p>
-          </div>
-          <div class="h-[1px] bg-hairline-soft"></div>
-          <div class="space-y-6">
-            ${manual.content}
-          </div>
-        `;
-      }
-
-      // Close mobile sidebar if open
-      document.getElementById("sidebar").classList.add("hidden");
-    }
-
-    // Initialize Page with Project Overview tab
-    document.addEventListener("DOMContentLoaded", () => {
-      switchTab("project_overview");
-
-      // Mobile Menu Trigger Controls
-      const menuBtn = document.getElementById("menu-btn");
-      const closeBtn = document.getElementById("close-btn");
-      const sidebar = document.getElementById("sidebar");
-
-      if (menuBtn && sidebar) {
-        menuBtn.addEventListener("click", () => {
-          sidebar.classList.remove("hidden");
-          sidebar.classList.add("fixed");
-        });
-      }
-
-      if (closeBtn && sidebar) {
-        closeBtn.addEventListener("click", () => {
-          sidebar.classList.add("hidden");
-        });
-      }
-    });
-  </script>
+  </div>
 </body>
 </html>

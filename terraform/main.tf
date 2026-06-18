@@ -19,7 +19,8 @@ resource "google_project_service" "apis" {
     "run.googleapis.com",              # Cloud Run
     "artifactregistry.googleapis.com", # Artifact Registry
     "secretmanager.googleapis.com",     # Secret Manager
-    "iam.googleapis.com"               # Identity & Access Management
+    "iam.googleapis.com",              # Identity & Access Management
+    "storage.googleapis.com"           # Cloud Storage
   ])
   project            = var.project_id
   service            = each.key
@@ -89,7 +90,8 @@ resource "google_cloud_run_v2_service" "backend" {
   ]
 
   template {
-    service_account = google_service_account.cloud_run_sa.email
+    execution_environment = "EXECUTION_ENVIRONMENT_GEN2"
+    service_account       = google_service_account.cloud_run_sa.email
 
     containers {
       # We reference a bootstrap image or the registry image.
@@ -186,6 +188,19 @@ resource "google_cloud_run_v2_service" "backend" {
           }
         }
       }
+
+      volume_mounts {
+        name       = "uploads-volume"
+        mount_path = "/app/uploads"
+      }
+    }
+
+    volumes {
+      name = "uploads-volume"
+      gcs {
+        bucket    = google_storage_bucket.uploads.name
+        read_only = false
+      }
     }
   }
 
@@ -201,4 +216,19 @@ resource "google_cloud_run_v2_service_iam_member" "public_access" {
   location = google_cloud_run_v2_service.backend.location
   role     = "roles/run.invoker"
   member   = "allUsers"
+}
+
+# ── Storage Bucket for Scan Uploads ────────────────────────────────────────
+resource "google_storage_bucket" "uploads" {
+  name          = "${var.project_id}-scans-uploads"
+  location      = var.region
+  force_destroy = true
+
+  uniform_bucket_level_access = true
+}
+
+resource "google_storage_bucket_iam_member" "gcs_accessor" {
+  bucket = google_storage_bucket.uploads.name
+  role   = "roles/storage.objectUser"
+  member = "serviceAccount:${google_service_account.cloud_run_sa.email}"
 }

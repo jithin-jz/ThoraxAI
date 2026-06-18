@@ -84,7 +84,7 @@ def build_tenant_url(subdomain: str) -> str:
 
     scheme = settings.TENANT_URL_SCHEME or "https"
     port = settings.TENANT_URL_PORT.strip()
-    host = f"{subdomain}.{settings.BASE_DOMAIN}"
+    host = settings.BASE_DOMAIN
     if port:
         host = f"{host}:{port}"
-    return f"{scheme}://{host}"
+    return f"{scheme}://{host}/t/{subdomain}"

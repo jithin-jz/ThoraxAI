@@ -35,9 +35,8 @@ class TenantResolverMiddleware(BaseHTTPMiddleware):
         host = request.headers.get("host")
         sub = extract_subdomain(host)
 
-        # 2. X-Tenant-Subdomain override — in DEBUG mode or if on local development base domain
-        is_local_dev = settings.BASE_DOMAIN in ("localhost", "127.0.0.1")
-        if not sub and (settings.DEBUG or is_local_dev):
+        # 2. X-Tenant-Subdomain override — always accepted if Host-based resolution yields None
+        if not sub:
             override = request.headers.get("x-tenant-subdomain", "").strip().lower()
             if override and is_valid_subdomain(override):
                 sub = override

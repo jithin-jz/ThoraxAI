@@ -22,15 +22,28 @@ export function getBaseDomain() {
 }
 
 /**
- * Parse the current window's hostname and return the tenant subdomain,
- * or null if on the apex / reserved / not under BASE_DOMAIN.
+ * Parse the current window's pathname and return the tenant subdomain,
+ * or null if on the apex / reserved.
  */
 export function getCurrentSubdomain() {
   if (typeof window === "undefined") return null;
-  return parseSubdomain(window.location.hostname);
+  return parseSubdomainFromPath(window.location.pathname);
+}
+
+export function parseSubdomainFromPath(pathname) {
+  if (!pathname) return null;
+  const match = pathname.match(/^\/t\/([^/]+)/);
+  if (match) {
+    const candidate = match[1].toLowerCase();
+    if (RESERVED.has(candidate)) return null;
+    if (!SUBDOMAIN_RE.test(candidate)) return null;
+    return candidate;
+  }
+  return null;
 }
 
 export function parseSubdomain(hostname) {
+  // Legacy hostname parser - fallback or unused
   if (!hostname) return null;
   const host = hostname.toLowerCase();
   if (host === BASE_DOMAIN) return null;
@@ -44,16 +57,17 @@ export function parseSubdomain(hostname) {
 }
 
 /**
- * Build a fully-qualified tenant URL. Returns "" if subdomain is invalid.
+ * Build a fully-qualified tenant URL using path-based routing.
  */
 export function buildTenantUrl(subdomain, path = "/") {
   if (!subdomain || !SUBDOMAIN_RE.test(subdomain)) return "";
   if (typeof window === "undefined") return "";
   const { protocol, port } = window.location;
   const host = port
-    ? `${subdomain}.${BASE_DOMAIN}:${port}`
-    : `${subdomain}.${BASE_DOMAIN}`;
-  return `${protocol}//${host}${path}`;
+    ? `${BASE_DOMAIN}:${port}`
+    : BASE_DOMAIN;
+  const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  return `${protocol}//${host}/t/${subdomain}${cleanPath}`;
 }
 
 /**

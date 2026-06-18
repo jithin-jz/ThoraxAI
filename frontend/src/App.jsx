@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { getCurrentSubdomain } from "./lib/subdomain";
 
 // Public pages
 import Landing from "./pages/Landing";
@@ -22,8 +23,11 @@ import AdminTenants from "./pages/dashboard/AdminTenants";
 import AllUsers from "./pages/dashboard/AllUsers";
 
 function App() {
+  const sub = getCurrentSubdomain();
+  const basename = sub ? `/t/${sub}` : "";
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Toaster
         position="top-right"
         toastOptions={{

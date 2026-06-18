@@ -12,7 +12,6 @@ from starlette.requests import Request
 
 from core.database import master_db
 from core.redis_client import redis_client
-from core.settings import settings
 from core.tenancy import extract_subdomain, is_valid_subdomain
 
 logger = logging.getLogger(__name__)

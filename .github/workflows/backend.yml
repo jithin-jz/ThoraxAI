@@ -54,4 +54,5 @@ jobs:
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image $IMAGE_TAG:${{ github.sha }} \
             --region ${{ env.REGION }} \
-            --platform managed
+            --platform managed \
+            --update-env-vars BASE_DOMAIN=thorax-ai-analyzer.web.app,ORIGIN=https://thorax-ai-analyzer.web.app,RP_ID=thorax-ai-analyzer.web.app

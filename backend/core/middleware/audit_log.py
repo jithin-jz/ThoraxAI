@@ -18,6 +18,9 @@ class AuditLogMiddleware(BaseHTTPMiddleware):
     SKIP_PATHS = {"/docs", "/redoc", "/openapi.json", "/health"}
 
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         if request.url.path in self.SKIP_PATHS:
             return await call_next(request)
 

@@ -20,6 +20,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     SKIP_PATHS = {"/docs", "/redoc", "/openapi.json", "/health"}
 
     async def dispatch(self, request: Request, call_next):
+        if request.method == "OPTIONS":
+            return await call_next(request)
+
         if request.url.path in self.SKIP_PATHS:
             return await call_next(request)
 
@@ -31,10 +34,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 key = f"tenant:{payload['hospital_id']}"
                 limit = self.TENANT_LIMIT
             else:
-                key = f"ip:{request.client.host}" if request.client else "ip:unknown"
+                key = f"ip:{self._client_ip(request)}"
                 limit = self.ANON_LIMIT
         else:
-            key = f"ip:{request.client.host}" if request.client else "ip:unknown"
+            key = f"ip:{self._client_ip(request)}"
             limit = self.ANON_LIMIT
 
         if not await check_rate_limit(key, limit, self.WINDOW):
@@ -44,3 +47,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             )
 
         return await call_next(request)
+
+    @staticmethod
+    def _client_ip(request: Request) -> str:
+        forwarded_for = request.headers.get("X-Forwarded-For", "")
+        if forwarded_for:
+            return forwarded_for.split(",", 1)[0].strip() or "unknown"
+        return request.client.host if request.client else "unknown"

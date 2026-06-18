@@ -1,3 +1,4 @@
+// Trigger Frontend CI/CD deployment after enabling APIs in GCP
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'

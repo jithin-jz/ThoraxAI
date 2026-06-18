@@ -1,4 +1,4 @@
-// Trigger Frontend CI/CD deployment after enabling Firebase Hosting API
+// Trigger Frontend CI/CD deployment after provisioning Firebase Hosting Site
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'

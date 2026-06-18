@@ -28,6 +28,12 @@ variable "db_name" {
   default     = "ai_xray_master"
 }
 
+variable "debug" {
+  description = "Enable backend debug logging"
+  type        = bool
+  default     = false
+}
+
 variable "redis_url" {
   description = "The Redis connection string (e.g. Upstash Redis)"
   type        = string
@@ -44,6 +50,18 @@ variable "base_domain" {
   description = "The base domain for multi-tenant routing (e.g. localhost or yourdomain.com)"
   type        = string
   default     = "localhost"
+}
+
+variable "tenant_url_scheme" {
+  description = "Scheme used when building tenant URLs"
+  type        = string
+  default     = "http"
+}
+
+variable "tenant_url_port" {
+  description = "Port used when building tenant URLs"
+  type        = string
+  default     = "5173"
 }
 
 variable "hf_token" {
@@ -66,6 +84,30 @@ variable "hf_model_repo" {
 
 variable "groq_api_key" {
   description = "Groq LLM API Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "smtp_host" {
+  description = "SMTP host used for OTP and password reset email"
+  type        = string
+  default     = "smtp.gmail.com"
+}
+
+variable "smtp_port" {
+  description = "SMTP port used for OTP and password reset email"
+  type        = number
+  default     = 587
+}
+
+variable "smtp_user" {
+  description = "SMTP username or sender email used for OTP delivery"
+  type        = string
+  sensitive   = true
+}
+
+variable "smtp_password" {
+  description = "SMTP app password used for OTP delivery"
   type        = string
   sensitive   = true
 }

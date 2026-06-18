@@ -1,3 +1,4 @@
+import logging
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -7,6 +8,8 @@ from jinja2 import Environment, FileSystemLoader
 
 from core.settings import settings
 
+logger = logging.getLogger(__name__)
+
 # Setup Jinja2 environment
 template_dir = Path(__file__).resolve().parent.parent / "templates" / "email"
 env = Environment(loader=FileSystemLoader(str(template_dir)))
@@ -14,9 +17,9 @@ env = Environment(loader=FileSystemLoader(str(template_dir)))
 
 def send_email(to_email: str, subject: str, html_body: str):
     if not settings.SMTP_USER or not settings.SMTP_PASSWORD:
-        print(
-            f"⚠️ SMTP credentials not configured. Skipping email to {to_email}. "
-            "Ensure .env is loaded."
+        logger.warning(
+            "SMTP credentials not configured. Skipping email to %s. Ensure SMTP_USER and SMTP_PASSWORD are set.",
+            to_email,
         )
         return
 
@@ -33,9 +36,9 @@ def send_email(to_email: str, subject: str, html_body: str):
         server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
         server.sendmail(settings.SMTP_USER, to_email, msg.as_string())
         server.quit()
-        print(f"Email sent successfully to {to_email}")
+        logger.info("Email sent successfully to %s", to_email)
     except Exception as e:
-        print(f"Failed to send email to {to_email}: {e}")
+        logger.exception("Failed to send email to %s: %s", to_email, e)
 
 
 def send_otp_email(to_email: str, otp: str):

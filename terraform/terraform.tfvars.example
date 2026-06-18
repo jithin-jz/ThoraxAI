@@ -15,6 +15,9 @@ redis_url       = "rediss://default:password@xxx.upstash.io:6379"
 # Auth and API Configurations
 jwt_secret_key  = "generate-a-secure-random-string-for-jwt"
 base_domain     = "yourdomain.com" # Or localhost if testing locally
+debug           = false
+tenant_url_scheme = "http"
+tenant_url_port = "5173"
 
 # Hugging Face Configuration (Model and Dataset Hub Access)
 hf_token        = "hf_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -24,3 +27,9 @@ hf_model_repo   = "jithinjz/xray-models"
 # LLM Config (Groq)
 groq_api_key    = "gsk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 groq_model      = "llama-3.3-70b-versatile"
+
+# SMTP Config for OTP / password reset mail
+smtp_host       = "smtp.gmail.com"
+smtp_port       = 587
+smtp_user       = "your_smtp_email@gmail.com"
+smtp_password   = "your_smtp_app_password"

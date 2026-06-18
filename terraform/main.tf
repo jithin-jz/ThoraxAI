@@ -57,6 +57,8 @@ locals {
     "JWT_SECRET_KEY" = var.jwt_secret_key
     "HF_TOKEN"       = var.hf_token
     "GROQ_API_KEY"   = var.groq_api_key
+    "SMTP_USER"      = var.smtp_user
+    "SMTP_PASSWORD"  = var.smtp_password
   }
 }
 
@@ -133,8 +135,20 @@ resource "google_cloud_run_v2_service" "backend" {
         value = var.db_name
       }
       env {
+        name  = "DEBUG"
+        value = tostring(var.debug)
+      }
+      env {
         name  = "BASE_DOMAIN"
         value = var.base_domain
+      }
+      env {
+        name  = "TENANT_URL_SCHEME"
+        value = var.tenant_url_scheme
+      }
+      env {
+        name  = "TENANT_URL_PORT"
+        value = var.tenant_url_port
       }
       env {
         name  = "ORIGIN"
@@ -143,14 +157,6 @@ resource "google_cloud_run_v2_service" "backend" {
       env {
         name  = "RP_ID"
         value = var.base_domain
-      }
-      env {
-        name  = "TENANT_URL_SCHEME"
-        value = "https"
-      }
-      env {
-        name  = "TENANT_URL_PORT"
-        value = ""
       }
       env {
         name  = "HF_DATASET_REPO"
@@ -163,6 +169,14 @@ resource "google_cloud_run_v2_service" "backend" {
       env {
         name  = "GROQ_MODEL"
         value = var.groq_model
+      }
+      env {
+        name  = "SMTP_HOST"
+        value = var.smtp_host
+      }
+      env {
+        name  = "SMTP_PORT"
+        value = tostring(var.smtp_port)
       }
 
       # Sensitive Env Variables (Pulled from Secret Manager)
@@ -207,6 +221,24 @@ resource "google_cloud_run_v2_service" "backend" {
         value_source {
           secret_key_ref {
             secret  = google_secret_manager_secret.secret["GROQ_API_KEY"].secret_id
+            version = "latest"
+          }
+        }
+      }
+      env {
+        name = "SMTP_USER"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.secret["SMTP_USER"].secret_id
+            version = "latest"
+          }
+        }
+      }
+      env {
+        name = "SMTP_PASSWORD"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.secret["SMTP_PASSWORD"].secret_id
             version = "latest"
           }
         }

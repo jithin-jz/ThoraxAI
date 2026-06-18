@@ -40,9 +40,15 @@ def create_app() -> FastAPI:
     tenant_origin_regex = (
         rf"^https?://([a-z0-9]([a-z0-9-]{{0,61}}[a-z0-9])?\.)?{escaped_base}(:\d{{1,5}})?$"
     )
+    allowed_origins = [settings.ORIGIN]
+    allowed_origins.extend(
+        origin.strip()
+        for origin in settings.EXTRA_CORS_ORIGINS.split(",")
+        if origin.strip()
+    )
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=[settings.ORIGIN],
+        allow_origins=allowed_origins,
         allow_origin_regex=tenant_origin_regex,
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],

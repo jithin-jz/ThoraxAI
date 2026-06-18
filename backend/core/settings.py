@@ -22,6 +22,10 @@ class Settings(BaseSettings):
     RP_ID: str = "localhost"
     RP_NAME: str = "AI XRay App"
     ORIGIN: str = "http://localhost:5173"
+    EXTRA_CORS_ORIGINS: str = (
+        "https://thorax-ai-analyzer.web.app,"
+        "https://thorax-ai-analyzer.firebaseapp.com"
+    )
 
     # JWT Security
     JWT_SECRET_KEY: str

@@ -24,7 +24,8 @@ class Settings(BaseSettings):
     ORIGIN: str = "http://localhost:5173"
     EXTRA_CORS_ORIGINS: str = (
         "https://thorax-ai-analyzer.web.app,"
-        "https://thorax-ai-analyzer.firebaseapp.com"
+        "https://thorax-ai-analyzer.firebaseapp.com,"
+        "https://thoraxai.web.app"
     )
 
     # JWT Security

@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/google"
       version = "~> 5.0"
     }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 5.0"
+    }
   }
 }
 
@@ -13,16 +17,22 @@ provider "google" {
   region  = var.region
 }
 
+provider "google-beta" {
+  project = var.project_id
+  region  = var.region
+}
+
 # ── Enable GCP APIs ────────────────────────────────────────────────────────
 resource "google_project_service" "apis" {
   for_each = toset([
-    "run.googleapis.com",              # Cloud Run
-    "artifactregistry.googleapis.com", # Artifact Registry
-    "secretmanager.googleapis.com",     # Secret Manager
-    "iam.googleapis.com",              # Identity & Access Management
-    "storage.googleapis.com",           # Cloud Storage
+    "run.googleapis.com",                  # Cloud Run
+    "artifactregistry.googleapis.com",     # Artifact Registry
+    "secretmanager.googleapis.com",        # Secret Manager
+    "iam.googleapis.com",                  # Identity & Access Management
+    "storage.googleapis.com",              # Cloud Storage
     "cloudresourcemanager.googleapis.com", # Cloud Resource Manager
-    "firebase.googleapis.com"          # Firebase Management API
+    "firebase.googleapis.com",             # Firebase Management API
+    "firebasehosting.googleapis.com"       # Firebase Hosting API
   ])
   project            = var.project_id
   service            = each.key
@@ -42,11 +52,11 @@ resource "google_artifact_registry_repository" "backend_repo" {
 # Helper local map to iterate over sensitive secrets
 locals {
   secrets = {
-    "DATABASE_URL"    = var.database_url
-    "REDIS_URL"       = var.redis_url
-    "JWT_SECRET_KEY"  = var.jwt_secret_key
-    "HF_TOKEN"        = var.hf_token
-    "GROQ_API_KEY"    = var.groq_api_key
+    "DATABASE_URL"   = var.database_url
+    "REDIS_URL"      = var.redis_url
+    "JWT_SECRET_KEY" = var.jwt_secret_key
+    "HF_TOKEN"       = var.hf_token
+    "GROQ_API_KEY"   = var.groq_api_key
   }
 }
 
@@ -83,9 +93,9 @@ resource "google_secret_manager_secret_iam_member" "secret_accessor" {
 
 # ── Cloud Run Service ───────────────────────────────────────────────────────
 resource "google_cloud_run_v2_service" "backend" {
-  name        = var.app_name
-  location    = var.region
-  depends_on  = [
+  name     = var.app_name
+  location = var.region
+  depends_on = [
     google_project_service.apis,
     google_secret_manager_secret_version.secret_version,
     google_secret_manager_secret_iam_member.secret_accessor
@@ -94,6 +104,10 @@ resource "google_cloud_run_v2_service" "backend" {
   template {
     execution_environment = "EXECUTION_ENVIRONMENT_GEN2"
     service_account       = google_service_account.cloud_run_sa.email
+    timeout               = "300s"
+
+    # PyTorch analysis is memory-heavy and should not run many requests per instance.
+    max_instance_request_concurrency = 1
 
     containers {
       # We reference a bootstrap image or the registry image.
@@ -101,6 +115,13 @@ resource "google_cloud_run_v2_service" "backend" {
       # or default to the artifact registry path which you will push to.
       # Here we use the Artifact Registry path. Note: You must build and push your image to run it.
       image = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.backend_repo.repository_id}/backend:latest"
+
+      resources {
+        limits = {
+          cpu    = "2"
+          memory = "4Gi"
+        }
+      }
 
       ports {
         container_port = 8000
@@ -149,7 +170,7 @@ resource "google_cloud_run_v2_service" "backend" {
         name = "DATABASE_URL"
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["DATABASE_URL"].secret_id
+            secret  = google_secret_manager_secret.secret["DATABASE_URL"].secret_id
             version = "latest"
           }
         }
@@ -158,7 +179,7 @@ resource "google_cloud_run_v2_service" "backend" {
         name = "REDIS_URL"
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["REDIS_URL"].secret_id
+            secret  = google_secret_manager_secret.secret["REDIS_URL"].secret_id
             version = "latest"
           }
         }
@@ -167,7 +188,7 @@ resource "google_cloud_run_v2_service" "backend" {
         name = "JWT_SECRET_KEY"
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["JWT_SECRET_KEY"].secret_id
+            secret  = google_secret_manager_secret.secret["JWT_SECRET_KEY"].secret_id
             version = "latest"
           }
         }
@@ -176,7 +197,7 @@ resource "google_cloud_run_v2_service" "backend" {
         name = "HF_TOKEN"
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["HF_TOKEN"].secret_id
+            secret  = google_secret_manager_secret.secret["HF_TOKEN"].secret_id
             version = "latest"
           }
         }
@@ -185,7 +206,7 @@ resource "google_cloud_run_v2_service" "backend" {
         name = "GROQ_API_KEY"
         value_source {
           secret_key_ref {
-            secret = google_secret_manager_secret.secret["GROQ_API_KEY"].secret_id
+            secret  = google_secret_manager_secret.secret["GROQ_API_KEY"].secret_id
             version = "latest"
           }
         }
@@ -233,4 +254,18 @@ resource "google_storage_bucket_iam_member" "gcs_accessor" {
   bucket = google_storage_bucket.uploads.name
   role   = "roles/storage.objectUser"
   member = "serviceAccount:${google_service_account.cloud_run_sa.email}"
+}
+
+# ── Firebase Project Setup ──────────────────────────────────────────────────
+resource "google_firebase_project" "default" {
+  provider   = google-beta
+  project    = var.project_id
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_firebase_hosting_site" "default" {
+  provider   = google-beta
+  project    = var.project_id
+  site_id    = var.project_id
+  depends_on = [google_firebase_project.default]
 }

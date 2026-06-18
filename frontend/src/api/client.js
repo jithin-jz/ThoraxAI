@@ -2,7 +2,7 @@ import { getCurrentSubdomain } from "../lib/subdomain";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
 const API_URL = `${API_BASE}/api/v1`;
-const REQUEST_TIMEOUT_MS = 30000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 30000;
 
 // ── Token helpers ───────────────────────────────────────────────────────────
 
@@ -57,7 +57,7 @@ async function refreshAccessToken() {
 // ── Core fetch wrapper ─────────────────────────────────────────────────────
 
 export async function apiFetch(path, options = {}) {
-  const { auth = true, raw = false, ...fetchOpts } = options;
+  const { auth = true, raw = false, timeoutMs = DEFAULT_REQUEST_TIMEOUT_MS, ...fetchOpts } = options;
 
   const headers = { ...(fetchOpts.headers || {}) };
 
@@ -79,7 +79,7 @@ export async function apiFetch(path, options = {}) {
 
   // Add timeout via AbortController
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   let res;
   try {
@@ -119,7 +119,7 @@ export async function apiFetch(path, options = {}) {
     // Retry with new token
     headers["Authorization"] = `Bearer ${getAccessToken()}`;
     const retryController = new AbortController();
-    const retryTimeout = setTimeout(() => retryController.abort(), REQUEST_TIMEOUT_MS);
+    const retryTimeout = setTimeout(() => retryController.abort(), timeoutMs);
     try {
       res = await fetch(`${API_URL}${path}`, {
         ...fetchOpts,

@@ -19,9 +19,6 @@ env
 data/
 uploads/
 
-# Model weights — downloaded at runtime from HF Hub
-routes/ai/models/*.pth
-
 # Training / migration scripts (not needed at runtime)
 scripts/
 

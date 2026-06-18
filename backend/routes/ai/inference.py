@@ -90,12 +90,13 @@ def _ensure_model_weights(cfg: BodyPartConfig) -> None:
 # ── Model Construction ────────────────────────────────────────────────────────
 
 
-def _build_densenet(num_classes: int) -> nn.Module:
+def _build_densenet(num_classes: int, *, pretrained: bool = False) -> nn.Module:
     """
     DenseNet121 with a custom classification head.
     num_classes = number of conditions for the target body part.
     """
-    net = models.densenet121(weights=models.DenseNet121_Weights.IMAGENET1K_V1)
+    weights = models.DenseNet121_Weights.IMAGENET1K_V1 if pretrained else None
+    net = models.densenet121(weights=weights)
     in_features = net.classifier.in_features  # 1024
     net.classifier = nn.Linear(in_features, num_classes)
     return net
@@ -108,14 +109,13 @@ def _load_model_for_part(body_part_key: str, cfg: BodyPartConfig) -> nn.Module:
     2. If missing, auto-downloads from Hugging Face Hub (HF_MODEL_REPO setting).
     3. Falls back to ImageNet pretrained weights if neither is available.
     """
-    num_classes = len(cfg.conditions)
-    model = _build_densenet(num_classes)
-
     # Attempt cloud download if weights are absent
     _ensure_model_weights(cfg)
 
+    num_classes = len(cfg.conditions)
     weights_path = MODELS_DIR / cfg.model_file
     if weights_path.exists() and weights_path.stat().st_size > 0:
+        model = _build_densenet(num_classes, pretrained=False)
         logger.info("[%s] Loading fine-tuned weights: %s", body_part_key, weights_path)
         state = torch.load(weights_path, map_location=DEVICE)
         # Support both raw state_dict and checkpoint dict
@@ -130,15 +130,33 @@ def _load_model_for_part(body_part_key: str, cfg: BodyPartConfig) -> nn.Module:
                 body_part_key,
                 e,
             )
-    else:
+        else:
+            model.to(DEVICE)
+            model.eval()
+            return model
+
+    logger.warning(
+        "[%s] No fine-tuned weights found at %s. "
+        "Set HF_MODEL_REPO/HF_TOKEN or include models/%s in the Docker image.",
+        body_part_key,
+        weights_path,
+        cfg.model_file,
+    )
+
+    try:
+        model = _build_densenet(num_classes, pretrained=True)
         logger.warning(
-            "[%s] No fine-tuned weights found at %s. "
-            "Using ImageNet pretrained weights — accuracy will be limited. "
-            "Train a model and place it at models/%s to improve accuracy.",
+            "[%s] Using ImageNet pretrained fallback - accuracy will be limited.",
             body_part_key,
-            weights_path,
-            cfg.model_file,
         )
+    except Exception as exc:
+        logger.exception(
+            "[%s] ImageNet fallback failed (%s). Using randomly initialized weights. "
+            "Production should be configured with fine-tuned weights.",
+            body_part_key,
+            exc,
+        )
+        model = _build_densenet(num_classes, pretrained=False)
 
     model.to(DEVICE)
     model.eval()

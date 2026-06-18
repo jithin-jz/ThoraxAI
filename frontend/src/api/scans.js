@@ -1,5 +1,7 @@
 import { apiFetch, API_URL } from "./client";
 
+const ANALYSIS_TIMEOUT_MS = 180000;
+
 export const listScans = (patientId = null) => {
   const query = patientId ? `?patient_id=${patientId}` : "";
   return apiFetch(`/scans/${query}`);
@@ -33,6 +35,7 @@ export const analyzeScan = (scanId, bodyPart = "chest") =>
   apiFetch("/ai/analyze", {
     method: "POST",
     body: JSON.stringify({ scan_id: scanId, body_part: bodyPart }),
+    timeoutMs: ANALYSIS_TIMEOUT_MS,
   });
 
 // Returns all supported body parts with conditions & descriptions

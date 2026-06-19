@@ -41,8 +41,10 @@ class Settings(BaseSettings):
 
     # Multi-tenancy (subdomain routing)
     BASE_DOMAIN: str = "localhost"
-    TENANT_URL_SCHEME: str = "http"
-    TENANT_URL_PORT: str = "5173"
+    # Production-safe defaults: https with no explicit port. Local dev overrides
+    # these via backend/.env (TENANT_URL_SCHEME=http, TENANT_URL_PORT=5173).
+    TENANT_URL_SCHEME: str = "https"
+    TENANT_URL_PORT: str = ""
     RESERVED_SUBDOMAINS: str = (
         "www,api,app,admin,dashboard,mail,smtp,ftp,blog,docs,help,support,"
         "status,assets,static,cdn,auth,login,signup,register,public,health"

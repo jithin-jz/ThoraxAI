@@ -72,13 +72,21 @@ export function buildTenantUrl(subdomain, path = "/") {
 
 /**
  * Validate that a URL is under our BASE_DOMAIN (prevents open redirect).
+ * Also trusts same-site redirects (the domain the app is currently served
+ * on), so tenant redirects work even if the build-time base domain differs
+ * from the host the app is actually deployed under.
  */
 export function isTrustedTenantUrl(url) {
   if (!url) return false;
   try {
     const parsed = new URL(url);
     const host = parsed.hostname.toLowerCase();
-    return host === BASE_DOMAIN || host.endsWith(`.${BASE_DOMAIN}`);
+    if (host === BASE_DOMAIN || host.endsWith(`.${BASE_DOMAIN}`)) return true;
+    if (typeof window !== "undefined") {
+      const current = window.location.hostname.toLowerCase();
+      if (host === current || host.endsWith(`.${current}`)) return true;
+    }
+    return false;
   } catch {
     return false;
   }

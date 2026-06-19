@@ -60,9 +60,9 @@ export default function TenantSettings() {
           <div className="w-16 h-16 rounded-md bg-surface-card text-primary flex items-center justify-center shrink-0">
             <Building2 className="w-8 h-8" strokeWidth={1.5} />
           </div>
-          <div>
-            <h2 className="text-2xl font-bold text-ink tracking-tight">{tenant.name}</h2>
-            <p className="text-xs text-ash font-mono mt-1">ID: {tenant.hospital_id}</p>
+          <div className="min-w-0">
+            <h2 className="text-2xl font-bold text-ink tracking-tight truncate" title={tenant.name}>{tenant.name}</h2>
+            <p className="text-xs text-ash font-mono mt-1 break-all">ID: {tenant.hospital_id}</p>
           </div>
         </div>
 

@@ -72,15 +72,15 @@ export default function Landing() {
 function TopNav({ tenantName }) {
   return (
     <nav className="sticky top-0 z-50 w-full bg-canvas border-b border-hairline h-16 flex items-center justify-between">
-      <div className="max-w-[1280px] w-full mx-auto px-6 h-full flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="w-8 h-8 rounded-md bg-primary flex items-center justify-center">
+      <div className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 h-full flex items-center justify-between gap-3">
+        <Link to="/" className="flex items-center gap-2 min-w-0">
+          <span className="w-8 h-8 rounded-md bg-primary flex items-center justify-center shrink-0">
             <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] text-white" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 2l1.5 4.5L18 8l-4.5 1.5L12 14l-1.5-4.5L6 8l4.5-1.5z" />
               <circle cx="12" cy="18" r="2" />
             </svg>
           </span>
-          <span className="text-[16px] font-bold text-ink tracking-tight font-sans">
+          <span className="text-[16px] font-bold text-ink tracking-tight font-sans truncate">
             {tenantName ? `${tenantName} Portal` : "ThoraxAI"}
           </span>
         </Link>
@@ -91,7 +91,7 @@ function TopNav({ tenantName }) {
           <a href="#security" className="hover:text-ink transition-colors">Security</a>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <Link
             to="/login"
             className="px-4 h-10 inline-flex items-center text-[12px] font-bold text-ink bg-transparent hover:bg-surface-card rounded-md transition-colors"

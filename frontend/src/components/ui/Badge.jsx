@@ -7,9 +7,9 @@ const variants = {
   purple: "bg-purple-50 text-[var(--accent-purple-deep)]",
 };
 
-export default function Badge({ children, variant = "default" }) {
+export default function Badge({ children, variant = "default", className = "" }) {
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 text-xs font-bold rounded-full ${variants[variant] || variants.default}`}>
+    <span className={`inline-flex items-center px-2.5 py-0.5 text-xs font-bold rounded-full ${variants[variant] || variants.default} ${className}`}>
       {children}
     </span>
   );

@@ -251,7 +251,7 @@ export default function Auth() {
         {tenantName ? `${tenantName} Portal` : "ThoraxAI"}
       </Link>
 
-      <div className="w-full max-w-[400px] bg-canvas border border-hairline rounded-lg p-8 shadow-sm">
+      <div className="w-full max-w-[400px] bg-canvas border border-hairline rounded-lg p-6 sm:p-8 shadow-sm">
         <h2 className="text-2xl font-bold tracking-tight text-ink text-center mb-2">
           {isLoginMode ? (isForgotMode ? "Reset password" : "Welcome back") : "Create account"}
         </h2>

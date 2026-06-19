@@ -97,12 +97,12 @@ export default function PatientDetail() {
             <div className="w-16 h-16 rounded-md bg-surface-card text-primary flex items-center justify-center text-2xl font-bold shrink-0">
               {patient.name?.charAt(0).toUpperCase()}
             </div>
-            <div>
-              <h1 className="text-2xl font-bold text-ink tracking-tight">{patient.name}</h1>
+            <div className="min-w-0">
+              <h1 className="text-2xl font-bold text-ink tracking-tight truncate" title={patient.name}>{patient.name}</h1>
               <p className="text-ash text-sm mt-1">
                 {patient.age}y &middot; {patient.gender} &middot; {patient.contact || "No contact"}
               </p>
-              <p className="text-xs text-ash font-mono mt-1">ID: {patient.patient_id}</p>
+              <p className="text-xs text-ash font-mono mt-1 break-all">ID: {patient.patient_id}</p>
             </div>
           </div>
           <button onClick={openEdit} className="w-full sm:w-auto flex items-center justify-center gap-2 h-10 px-4 border border-hairline bg-transparent rounded-md text-sm font-bold text-mute hover:bg-surface-card hover:text-ink transition-colors cursor-pointer">

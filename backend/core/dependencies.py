@@ -38,6 +38,11 @@ async def get_current_user(
     if not payload:
         raise InvalidTokenException()
 
+    # Refresh tokens are long-lived and must never authenticate protected routes;
+    # they may only be exchanged at /auth/refresh.
+    if payload.get("type") == "refresh":
+        raise InvalidTokenException("Refresh token cannot be used for authentication")
+
     email = payload.get("sub")
     if not email:
         raise InvalidTokenException("Token missing subject")

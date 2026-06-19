@@ -70,11 +70,15 @@ async def get_image(
     safe_path = _safe_file_path(image_path)
 
     suffix = safe_path.suffix.lower()
-    media_type = "image/png"
-    if suffix in [".jpg", ".jpeg"]:
-        media_type = "image/jpeg"
-    elif suffix == ".gif":
-        media_type = "image/gif"
+    media_type = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".gif": "image/gif",
+        ".bmp": "image/bmp",
+        ".dcm": "application/dicom",
+        ".dicom": "application/dicom",
+    }.get(suffix, "application/octet-stream")
 
     return FileResponse(
         path=str(safe_path),
@@ -90,7 +94,10 @@ async def upload_image(
     user: dict = Depends(require_doctor),
     tenant_db: AsyncIOMotorDatabase = Depends(get_tenant_db),
 ):
-    import shutil
+    # ── Ensure the scan exists in this tenant before accepting an upload ──────
+    scan = await tenant_db.scans.find_one({"scan_id": scan_id}, {"_id": 1})
+    if not scan:
+        raise NotFoundException("Scan")
 
     # ── Validate file type ──────────────────────────────────────────────────
     suffix = Path(file.filename).suffix.lower() if file.filename else ""
@@ -115,8 +122,28 @@ async def upload_image(
     safe_filename = Path(file.filename).name  # strip any path components
     dest = upload_dir / safe_filename
 
-    with dest.open("wb") as out:
-        shutil.copyfileobj(file.file, out)
+    # ── Stream to disk with an enforced size cap to prevent unbounded uploads ─
+    bytes_written = 0
+    chunk_size = 1024 * 1024  # 1 MB
+    try:
+        with dest.open("wb") as out:
+            while True:
+                chunk = await file.read(chunk_size)
+                if not chunk:
+                    break
+                bytes_written += len(chunk)
+                if bytes_written > MAX_UPLOAD_SIZE:
+                    raise BadRequestException(
+                        f"File exceeds the maximum allowed size of "
+                        f"{MAX_UPLOAD_SIZE // (1024 * 1024)} MB."
+                    )
+                out.write(chunk)
+    except BadRequestException:
+        # Remove the partial file so we don't leave truncated uploads on disk
+        dest.unlink(missing_ok=True)
+        raise
+    finally:
+        await file.close()
 
     image_path = str(dest)
     await tenant_db.scans.update_one(

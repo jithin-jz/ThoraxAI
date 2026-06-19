@@ -49,17 +49,17 @@ export default function Overview() {
             </div>
             <div className="divide-y divide-hairline">
               {data.hospitals.map((h) => (
-                <div key={h.id} className="px-6 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-surface-card rounded-md flex items-center justify-center text-mute">
+                <div key={h.id} className="px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-9 h-9 bg-surface-card rounded-md flex items-center justify-center text-mute shrink-0">
                       <Building2 className="w-4 h-4" strokeWidth={1.8} />
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-ink">{h.name}</p>
-                      <p className="text-xs text-ash font-mono">{h.id?.slice(0, 12)}</p>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-ink truncate" title={h.name}>{h.name}</p>
+                      <p className="text-xs text-ash font-mono truncate">{h.id?.slice(0, 12)}</p>
                     </div>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 shrink-0">
                     <Badge variant={h.is_active ? "success" : "danger"}>{h.is_active ? "Active" : "Inactive"}</Badge>
                   </div>
                 </div>
@@ -90,16 +90,16 @@ export default function Overview() {
             </div>
             <div className="divide-y divide-hairline">
               {data.roster.map((d, i) => (
-                <div key={i} className="px-6 py-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-surface-card rounded-full flex items-center justify-center text-ink text-xs font-bold">
+                <div key={i} className="px-4 sm:px-6 py-4 flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-8 h-8 bg-surface-card rounded-full flex items-center justify-center text-ink text-xs font-bold shrink-0">
                       {d.email?.charAt(0).toUpperCase()}
                     </div>
-                    <span className="text-sm font-semibold text-ink">{d.email}</span>
+                    <span className="text-sm font-semibold text-ink truncate" title={d.email}>{d.email}</span>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 shrink-0">
                     <Badge variant={d.is_verified ? "success" : "warning"}>{d.is_verified ? "Verified" : "Pending"}</Badge>
-                    <Badge variant={d.has_passkey ? "info" : "default"}>{d.has_passkey ? "Passkey" : "Password"}</Badge>
+                    <Badge variant={d.has_passkey ? "info" : "default"} className="hidden sm:inline-flex">{d.has_passkey ? "Passkey" : "Password"}</Badge>
                   </div>
                 </div>
               ))}

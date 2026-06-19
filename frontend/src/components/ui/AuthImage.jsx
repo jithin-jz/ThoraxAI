@@ -9,7 +9,11 @@ export default function AuthImage({ src, alt, className = "", ...props }) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (!src) return;
+    if (!src) {
+      setLoading(false);
+      setError(true);
+      return;
+    }
 
     let active = true;
     let objectUrl = "";

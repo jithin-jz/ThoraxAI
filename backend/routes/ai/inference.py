@@ -12,6 +12,7 @@ Final fallback:       ImageNet weights if HF is also unavailable (lower accuracy
 
 import asyncio
 import logging
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -28,6 +29,9 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # In-memory cache: body_part_key → loaded nn.Module
 _model_cache: dict[str, nn.Module] = {}
+# Guards _model_cache against concurrent loads from the event loop thread
+# (service.py calls get_model directly) and the inference executor thread.
+_model_cache_lock = threading.Lock()
 
 
 # ── Cloud Download Helper ─────────────────────────────────────────────────────
@@ -173,8 +177,11 @@ def get_model(body_part_key: str) -> nn.Module:
     """
     key = body_part_key.lower().strip()
     if key not in _model_cache:
-        cfg = get_body_part(key)
-        _model_cache[key] = _load_model_for_part(key, cfg)
+        with _model_cache_lock:
+            # Double-checked: another thread may have loaded it while we waited.
+            if key not in _model_cache:
+                cfg = get_body_part(key)
+                _model_cache[key] = _load_model_for_part(key, cfg)
     return _model_cache[key]
 
 

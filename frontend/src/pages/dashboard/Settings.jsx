@@ -29,16 +29,16 @@ export default function DashboardSettings() {
 
       <div className="bg-canvas border border-hairline rounded-md p-6 space-y-6">
         {/* Passkey */}
-        <div className="flex items-center gap-4">
-          <div className={`p-3 rounded-md ${hasPasskey ? "bg-success-pale" : "bg-surface-card"}`}>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+          <div className={`p-3 rounded-md shrink-0 self-start ${hasPasskey ? "bg-success-pale" : "bg-surface-card"}`}>
             {hasPasskey ? <ShieldCheck className="w-6 h-6 text-success" /> : <Fingerprint className="w-6 h-6 text-ink" />}
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h3 className="text-base font-bold text-ink tracking-tight">Biometric Security</h3>
             <p className="text-sm text-mute mt-0.5">{hasPasskey ? "Passkey active — passwordless login enabled." : "Set up a passkey for faster, safer login."}</p>
           </div>
           {!hasPasskey && (
-            <button onClick={handleCreatePasskey} disabled={setting} className="h-10 px-4 text-sm font-bold text-white bg-primary rounded-md hover:bg-primary-pressed transition-colors cursor-pointer disabled:opacity-50">
+            <button onClick={handleCreatePasskey} disabled={setting} className="w-full sm:w-auto shrink-0 h-10 px-4 text-sm font-bold text-white bg-primary rounded-md hover:bg-primary-pressed transition-colors cursor-pointer disabled:opacity-50">
               {setting ? "Setting up..." : "Setup Passkey"}
             </button>
           )}
@@ -48,11 +48,11 @@ export default function DashboardSettings() {
 
         {/* Account info */}
         <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <Mail className="w-4 h-4 text-ash" />
-            <div>
+          <div className="flex items-center gap-3 min-w-0">
+            <Mail className="w-4 h-4 text-ash shrink-0" />
+            <div className="min-w-0">
               <p className="text-xs font-bold text-ash uppercase tracking-wider">Email</p>
-              <p className="text-sm font-semibold text-ink mt-0.5">{user?.email}</p>
+              <p className="text-sm font-semibold text-ink mt-0.5 truncate" title={user?.email}>{user?.email}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">

@@ -31,6 +31,8 @@ async def passkey_register_verify(
         "message": "Passkey registered successfully",
         "access_token": result["access_token"],
         "refresh_token": result["refresh_token"],
+        "subdomain": result.get("subdomain"),
+        "tenant_url": result.get("tenant_url"),
     }
 
 
@@ -53,4 +55,6 @@ async def passkey_login_verify(
         "message": "Passkey login success",
         "access_token": result["access_token"],
         "refresh_token": result["refresh_token"],
+        "subdomain": result.get("subdomain"),
+        "tenant_url": result.get("tenant_url"),
     }

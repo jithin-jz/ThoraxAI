@@ -14,10 +14,24 @@ from core.exceptions import BadRequestException, NotFoundException
 from core.redis_client import delete_challenge, get_challenge, set_challenge
 from core.security import create_access_token, create_refresh_token, hash_password
 from core.settings import settings
+from core.tenancy import build_tenant_url
 
 RP_ID = settings.RP_ID
 RP_NAME = settings.RP_NAME
 ORIGIN = settings.ORIGIN
+
+
+async def _resolve_tenant_links(user: dict, db: AsyncIOMotorDatabase) -> tuple[str | None, str | None]:
+    """Return (subdomain, tenant_url) for a user's hospital, if any."""
+    hospital_id = user.get("hospital_id")
+    if not hospital_id:
+        return None, None
+    hospital = await db.hospitals.find_one({"hospital_id": hospital_id})
+    if not hospital:
+        return None, None
+    subdomain = hospital.get("subdomain")
+    tenant_url = build_tenant_url(subdomain) if subdomain else None
+    return subdomain, tenant_url
 
 
 async def start_registration(email: str, db: AsyncIOMotorDatabase) -> dict:
@@ -70,6 +84,7 @@ async def verify_registration(email: str, response: dict, db: AsyncIOMotorDataba
     await delete_challenge(email)
 
     user = await db.users.find_one({"email": email})
+    subdomain, tenant_url = await _resolve_tenant_links(user, db)
     token_data = {
         "sub": email,
         "role": user.get("role"),
@@ -78,6 +93,8 @@ async def verify_registration(email: str, response: dict, db: AsyncIOMotorDataba
     return {
         "access_token": create_access_token(token_data),
         "refresh_token": create_refresh_token(token_data),
+        "subdomain": subdomain,
+        "tenant_url": tenant_url,
     }
 
 
@@ -120,6 +137,7 @@ async def verify_login(email: str, response: dict, db: AsyncIOMotorDatabase) -> 
 
     await delete_challenge(email)
 
+    subdomain, tenant_url = await _resolve_tenant_links(user, db)
     token_data = {
         "sub": email,
         "role": user.get("role"),
@@ -128,4 +146,6 @@ async def verify_login(email: str, response: dict, db: AsyncIOMotorDatabase) -> 
     return {
         "access_token": create_access_token(token_data),
         "refresh_token": create_refresh_token(token_data),
+        "subdomain": subdomain,
+        "tenant_url": tenant_url,
     }

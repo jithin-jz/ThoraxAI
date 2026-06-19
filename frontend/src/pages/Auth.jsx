@@ -105,11 +105,15 @@ export default function Auth() {
           navigate("/dashboard");
         } else {
           toast.success("Redirecting to your workspace...");
-          safeTenantRedirect(res.tenant_url, "/login", {
+          const redirected = safeTenantRedirect(res.tenant_url, "/login", {
             token: res.access_token,
             refresh_token: res.refresh_token,
             has_passkey: res.has_passkey ? "true" : "false"
           });
+          if (!redirected) {
+            await login(res.access_token, res.refresh_token, res.has_passkey);
+            navigate("/dashboard");
+          }
         }
       } else setError(res.detail || "Invalid credentials");
     } catch (err) { setError(err.message || "Login failed"); }
@@ -133,11 +137,15 @@ export default function Auth() {
           navigate("/dashboard");
         } else {
           toast.success("Redirecting to your workspace...");
-          safeTenantRedirect(res.tenant_url, "/login", {
+          const redirected = safeTenantRedirect(res.tenant_url, "/login", {
             token: res.access_token,
             refresh_token: res.refresh_token,
             has_passkey: "true"
           });
+          if (!redirected) {
+            await login(res.access_token, res.refresh_token, true);
+            navigate("/dashboard");
+          }
         }
       } else setError(res.detail || "Passkey login failed.");
     } catch { setError("Passkey login cancelled or failed."); }

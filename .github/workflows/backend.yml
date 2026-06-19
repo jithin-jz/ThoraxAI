@@ -55,5 +55,5 @@ jobs:
             --image $IMAGE_TAG:${{ github.sha }} \
             --region ${{ env.REGION }} \
             --platform managed \
-            --update-env-vars BASE_DOMAIN=thorax-ai-analyzer.web.app,ORIGIN=https://thorax-ai-analyzer.web.app,RP_ID=thorax-ai-analyzer.web.app,TENANT_URL_SCHEME=https \
+            --update-env-vars BASE_DOMAIN=thoraxai.web.app,ORIGIN=https://thoraxai.web.app,RP_ID=thoraxai.web.app,TENANT_URL_SCHEME=https \
             --remove-env-vars TENANT_URL_PORT
